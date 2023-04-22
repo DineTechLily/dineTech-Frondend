@@ -1,16 +1,13 @@
 <template>
-  <RouterView />
+  <main>顧客進入頁</main>
 </template>
 
 <script lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   data() {
-    return {
-      count: 1
-    }
+    return {}
   }
 })
 </script>

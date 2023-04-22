@@ -1,9 +1,8 @@
 <template>
-  <RouterView />
+  <p>主選單</p>
 </template>
 
 <script lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
