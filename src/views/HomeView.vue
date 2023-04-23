@@ -1,5 +1,6 @@
 <template>
-  <main>首頁</main>
+  <main class="text-3xl font-bold underline">首頁</main>
+  <p></p>
 </template>
 
 <script lang="ts">
