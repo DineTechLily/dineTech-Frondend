@@ -26,6 +26,14 @@ const routes: RouteRecordRaw[] = [
       title: '找不到頁面',
     }
   },
+  {
+    path: '/routes',
+    name: 'routes',
+    component: () => import('@/views/RoutesView.vue'),
+    meta: {
+      title: '路由頁面',
+    }
+  },
   adminRoutes,
   clientRoutes,
   staffRoutes,
