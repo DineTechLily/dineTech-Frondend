@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/HomeView.vue'),
+    component: () => import('@/views/general/HomeView.vue'),
     meta: {
       title: 'DineTech 餐飲 iPad POS 系統 ',
     }
@@ -21,7 +21,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('@/views/TheErrorPage.vue'),
+    component: () => import('@/views/general/TheErrorPage.vue'),
     meta: {
       title: '找不到頁面',
     }
@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/routes',
     name: 'routes',
-    component: () => import('@/views/RoutesView.vue'),
+    component: () => import('@/views/general/RoutesView.vue'),
     meta: {
       title: '路由頁面',
     }

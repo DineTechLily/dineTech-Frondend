@@ -13,7 +13,7 @@
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
         <tr
-          v-for="item in common"
+          v-for="item in general"
           :key="item.path"
           class="hover:bg-gray-100 dark:hover:bg-gray-700"
         >
@@ -21,8 +21,9 @@
             <router-link
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
               :to="item.path"
-              >{{ item.name }}</router-link
             >
+              {{ item.name }}
+            </router-link>
           </td>
           <td class="px-6 py-3">
             <span class="bg-amber-200 p-1 whitespace-nowrap rounded-md">{{ item.role }}</span>
@@ -33,8 +34,9 @@
               :href="item.url"
               target="_blank"
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
-              >{{ item.url }}</a
             >
+              {{ item.url }}
+            </a>
           </td>
           <td class="px-6 py-3"><span class="bg-gray-200 p-1 rounded-md">否</span></td>
         </tr>
@@ -47,8 +49,9 @@
             <router-link
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
               :to="item.path"
-              >{{ item.name }}</router-link
             >
+              {{ item.name }}
+            </router-link>
           </td>
           <td class="px-6 py-3">
             <span class="bg-violet-200 p-1 whitespace-nowrap rounded-md">{{ item.role }}</span>
@@ -59,8 +62,9 @@
               :href="item.url"
               target="_blank"
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
-              >{{ item.url }}</a
             >
+              {{ item.url }}
+            </a>
           </td>
           <td class="px-6 py-3"><span class="bg-gray-200 p-1 rounded-md">否</span></td>
         </tr>
@@ -69,8 +73,9 @@
             <router-link
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
               :to="item.path"
-              >{{ item.name }}</router-link
             >
+              {{ item.name }}
+            </router-link>
           </td>
           <td class="px-6 py-3">
             <span class="bg-blue-200 p-1 whitespace-nowrap rounded-md">{{ item.role }}</span>
@@ -81,8 +86,9 @@
               :href="item.url"
               target="_blank"
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
-              >{{ item.url }}</a
             >
+              {{ item.url }}
+            </a>
           </td>
           <td class="px-6 py-3"><span class="bg-orange-200 p-1 rounded-md">是</span></td>
         </tr>
@@ -91,8 +97,9 @@
             <router-link
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
               :to="item.path"
-              >{{ item.name }}</router-link
             >
+              {{ item.name }}
+            </router-link>
           </td>
           <td class="px-6 py-3">
             <span class="bg-emerald-200 p-1 whitespace-nowrap rounded-md">{{ item.role }}</span>
@@ -103,8 +110,9 @@
               :href="item.url"
               target="_blank"
               class="font-medium text-cyan-700 dark:text-blue-500 hover:underline"
-              >{{ item.url }}</a
             >
+              {{ item.url }}
+            </a>
           </td>
           <td class="px-6 py-3"><span class="bg-orange-200 p-1 rounded-md">是</span></td>
         </tr>
@@ -119,7 +127,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   data() {
     return {
-      common: [
+      general: [
         { name: '首頁', role: '共用', path: '/', url: 'https://dinetech-frondend.onrender.com' },
         {
           name: '錯誤頁面',
