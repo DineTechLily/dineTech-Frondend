@@ -1,13 +1,16 @@
 <template>
-  <TheHeader />
+  <MobileHeader v-if="isMobile()" />
+  <DesktopHeader v-else />
   <section class="bg-[url('@/assets/images/home/home-bg-landing.png')] bg-no-repeat bg-cover">
     <div class="sm:px-10 lg:px-20 2xl:px-60 mx-auto h-full flex flex-col">
-      <div class="flex justify-between items-center pt-10">
-        <h1 class="mb-40 whitespace-nowrap">
+      <div class="flex justify-between flex-col md:flex-row items-center pt-10">
+        <h1 class="md:mb-40 whitespace-nowrap">
           <span class="block w-4 h-4 bg-primary-blue rounded-md"></span>
-          <p class="text-5xl font-bold text-primary-orange leading-normal">聰明用餐，輕鬆經營</p>
-          <p class="text-2.5xl">DineTech 是一套專為小型餐飲業者</p>
-          <p class="text-2.5xl">設計的 iPad POS 點餐系統。</p>
+          <p class="text-3.5xl md:text-5xl font-bold text-primary-orange leading-normal">
+            聰明用餐，輕鬆經營
+          </p>
+          <p class="text-base md:text-2.5xl">DineTech 是一套專為小型餐飲業者</p>
+          <p class="text-base md:text-2.5xl">設計的 iPad POS 點餐系統。</p>
         </h1>
         <img
           class="mt-8"
@@ -137,7 +140,7 @@
       </p>
       <h2 class="text-3.5xl font-bold">您絕對負擔的起的價格！</h2>
       <p class="text-gray-9f my-2">
-        不要讓昂貴的 POS 系統成為您開店的負擔！我們的系統以實惠的價格提供您所需的。
+        不要讓昂貴的 POS 系統成為您開店的負擔！我們的系統以實惠的價格提供您所需的一切。
       </p>
     </div>
     <div class="flex justify-center items-center gap-6">
@@ -413,18 +416,25 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import TheHeader from '@/components/general/TheHeader.vue'
+import DesktopHeader from '@/components/general/DesktopHeader.vue'
 import TheFooter from '@/components/general/TheFooter.vue'
+import MobileHeader from '@/components/general/MobileHeader.vue'
 import ContactForm from '@/components/general/ContactForm.vue'
 
 export default defineComponent({
   components: {
-    TheHeader,
+    DesktopHeader,
+    MobileHeader,
     TheFooter,
     ContactForm
   },
   data() {
     return {}
+  },
+  methods: {
+    isMobile() {
+      return screen.width < 768 ? true : false
+    }
   }
 })
 </script>
