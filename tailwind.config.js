@@ -5,9 +5,6 @@ module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      height: {
-        18: '4.5rem'
-      },
       fontSize: {
         '2.5xl': '1.75rem',
         '3.5xl': '2rem'
@@ -22,6 +19,7 @@ module.exports = {
         },
         secondary: {
           yellow: '#FFD246',
+          red: '#EE0723',
           black: '#000000',
           white: '#FFFFFF'
         },
@@ -34,6 +32,9 @@ module.exports = {
           33: '#333333',
           '1d': '#1D1D1D'
         }
+      },
+      transitionProperty: {
+        height: 'height'
       },
       fontFamily: {
         sans: ['Noto Sans TC', 'Inter', ...defaultTheme.fontFamily.sans]
