@@ -32,14 +32,12 @@
         </div>
       </div>
     </div>
-  </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import axios from 'axios';
+import axios from 'axios'
 const apiUrl = 'https://dinetech-host2.onrender.com'
-
 
 export default defineComponent({
   data() {
@@ -48,24 +46,24 @@ export default defineComponent({
         company_id: '',
         emp_id: '',
         password: ''
-      },
+      }
     }
   },
   methods: {
     login() {
-      const loginApi = `${apiUrl}/emp/login`;
+      const loginApi = `${apiUrl}/emp/login`
       axios
         .post(loginApi, this.employees)
         .then((response) => {
-          alert(response.data.message);
-          const token = response.data.token;
-          document.cookie = token;
+          alert(response.data.message)
+          const token = response.data.token
+          document.cookie = token
           this.$router.push({ path: './Orders' })
         })
         .catch((error) => {
-          alert(error.response.data.message);
+          alert(error.response.data.message)
         })
-    },
+    }
   }
 })
 </script>

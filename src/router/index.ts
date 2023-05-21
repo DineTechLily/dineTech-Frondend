@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
       title: '路由頁面',
     }
   },
-  adminRoutes,
+  ...adminRoutes,
   clientRoutes,
   staffRoutes,
 ]

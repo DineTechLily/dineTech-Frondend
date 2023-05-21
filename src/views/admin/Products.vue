@@ -1,5 +1,13 @@
 <template>
-  <main>後台產品頁</main>
+  <main>
+    <div>商品管理</div>
+    <div class="bg-white rounded-lg w-full">
+      <div>
+        <input type="text" />
+        <button class="border border-black rounded-lg">搜尋</button>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script lang="ts">
