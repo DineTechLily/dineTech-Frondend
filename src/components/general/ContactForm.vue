@@ -1,110 +1,234 @@
 <template>
-  <form class="w-2/3 flex flex-col gap-y-4 p-12 bg-secondary-white" @submit.prevent="onSubmit">
-    <div class="flex gap-x-6">
-      <div class="w-1/2 flex flex-col gap-y-4">
-        <BaseInput
+  <Form
+    v-bind="$attrs"
+    class="w-full md:w-2/3 flex flex-col gap-y-4 py-8 px-5 md:p-12 bg-secondary-white"
+    @submit="submitForm"
+  >
+    <div class="flex flex-col md:flex-row flex-wrap gap-x-6 gap-y-4">
+      <label class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          店家名稱
+        </p>
+        <Field
           v-model="form.contactStoreName"
           name="contactStoreName"
+          type="text"
+          :rules="{ required: true, max: 20 }"
           label="店家名稱"
-          required
+          class="w-full border border-gray-d4 py-2 px-4 rounded-md focus:outline-none focus:border-secondary-yellow focus:ring-secondary-yellow text-gray-66"
         />
-        <BaseInput v-model="form.contactName" name="contactName" label="聯絡人" required />
-        <base-select v-model="form.contactCity" name="contactCity" label="所在縣市" required>
-          <option selected disabled hidden>請選擇</option>
-          <option v-for="option in contactCityOptions" :key="option.value" :value="option.value">
-            {{ option.name }}
-          </option>
-        </base-select>
-        <div class="w-full flex flex-col">
-          <div class="flex gap-x-16">
-            <base-radio-group label="營業狀態">
-              <div class="flex gap-x-4">
-                <BaseRadio
-                  v-model="form.contactOperation"
-                  v-for="(option, index) in contactOperationOptions"
-                  :key="option.value"
-                  :value="option.value"
-                  :name="option.name"
-                  :label="option.label"
-                  :checked="index === 0"
-                />
-              </div>
-            </base-radio-group>
-          </div>
-        </div>
-      </div>
-      <div class="w-1/2 flex flex-col gap-y-4">
-        <BaseInput
+        <ErrorMessage name="contactStoreName" class="text-secondary-red text-sm" />
+      </label>
+      <label class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          Email
+        </p>
+        <Field
           v-model="form.contactEmail"
           name="contactEmail"
-          label="Email"
-          required
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          type="email"
+          :rules="{ required: true, email: true, max: 50 }"
+          label="電子信箱"
+          class="w-full border border-gray-d4 py-2 px-4 rounded-md focus:outline-none focus:border-secondary-yellow focus:ring-secondary-yellow text-gray-66"
         />
-        <BaseInput v-model="form.contactPhone" name="contactPhone" label="連絡電話" required />
-        <base-select v-model="form.contactPeriod" name="contactTime" label="希望聯繫時段" required>
+        <ErrorMessage name="contactEmail" class="text-secondary-red text-sm" />
+      </label>
+      <label class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          聯絡人
+        </p>
+        <Field
+          v-model="form.contactName"
+          name="contactName"
+          type="text"
+          label="聯絡人"
+          :rules="{ required: true, max: 20 }"
+          class="w-full border border-gray-d4 py-2 px-4 rounded-md focus:outline-none focus:border-secondary-yellow focus:ring-secondary-yellow text-gray-66"
+        />
+        <ErrorMessage name="contactName" class="text-secondary-red text-sm" />
+      </label>
+      <label class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          聯絡電話
+        </p>
+        <Field
+          v-model="form.contactPhone"
+          name="contactPhone"
+          type="tel"
+          label="聯絡電話"
+          :rules="{ required: true, numeric: true, max: 20 }"
+          class="w-full border border-gray-d4 py-2 px-4 rounded-md focus:outline-none focus:border-secondary-yellow focus:ring-secondary-yellow text-gray-66"
+        />
+        <ErrorMessage name="contactPhone" class="text-secondary-red text-sm" />
+      </label>
+      <label class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          所在縣市
+        </p>
+        <Field
+          v-model="form.contactCity"
+          name="contactCity"
+          as="select"
+          :rules="{ required: true, is_not: '請選擇' }"
+          label="所在縣市"
+          class="w-full border border-gray-d4 py-2 px-4 rounded-md focus:outline-none focus:border-secondary-yellow focus:ring-secondary-yellow text-gray-66"
+        >
+          <option selected disabled hidden>請選擇</option>
           <option
-            v-for="(option, index) in contactPeriodOptions"
+            v-for="option in contactCityOptions"
             :key="option.value"
             :value="option.value"
-            :selected="index === 0"
+            class="checked:bg-secondary-yellow"
           >
             {{ option.name }}
           </option>
-        </base-select>
-        <base-select
-          v-model="form.contactSource"
-          name="contactSource"
-          label="從何處知道我們"
-          required
+        </Field>
+        <ErrorMessage name="contactCity" class="text-secondary-red text-sm" />
+      </label>
+      <label class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          希望聯繫時段
+        </p>
+        <Field
+          v-model="form.contactPeriod"
+          name="contactPeriod"
+          as="select"
+          rules="required"
+          label="希望聯繫時段"
+          class="w-full border border-gray-d4 py-2 px-4 rounded-md focus:outline-none focus:border-secondary-yellow focus:ring-secondary-yellow text-gray-66"
         >
           <option
-            v-for="(option, index) in contactSourceOptions"
+            v-for="option in contactPeriodOptions"
             :key="option.value"
             :value="option.value"
-            :selected="index === 0"
+            class="checked:bg-secondary-yellow"
           >
             {{ option.name }}
           </option>
-        </base-select>
+        </Field>
+        <ErrorMessage name="contactPeriod" class="text-secondary-red text-sm" />
+      </label>
+      <div class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          營業狀態
+        </p>
+        <div class="flex gap-x-4 ps-2 md:mt-3">
+          <label v-for="option in contactOperationOptions">
+            <Field
+              v-model="form.contactOperation"
+              name="contactOperation"
+              type="radio"
+              :value="option.value"
+              rules="required"
+              label="營業狀態"
+              class="w-4 h-4 border border-gray-d4 rounded-full checked:bg-primary-orange checked:text-primary-orange checked:ring-transparent focus:ring-transparent focus:border-gray-9f"
+            />
+            <span class="ps-2 text-sm">{{ option.label }}</span>
+          </label>
+          <ErrorMessage name="contactOperation" class="text-secondary-red text-sm" />
+        </div>
       </div>
-    </div>
-    <div class="w-full flex flex-col">
-      <base-checkbox-group label="詢問內容（可複選）" required>
-        <div class="flex flex-wrap gap-x-5 gap-y-3.5">
-          <BaseCheckbox
-            v-for="option in contactReasonOptions"
+      <label class="md:w-[calc(50%-0.75rem)]">
+        <p
+          class="block mb-1 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+        >
+          從何處知道我們
+        </p>
+        <Field
+          v-model="form.contactSource"
+          name="contactSource"
+          as="select"
+          rules="required"
+          label="從何處知道我們"
+          class="w-full border border-gray-d4 py-2 px-4 rounded-md focus:outline-none focus:border-secondary-yellow focus:ring-secondary-yellow text-gray-66"
+        >
+          <option
+            v-for="option in contactSourceOptions"
             :key="option.value"
             :value="option.value"
-            :label="option.label"
-            @update:modelValue="updateContactReasons"
-          />
-        </div>
-      </base-checkbox-group>
+            class="checked:bg-secondary-yellow"
+          >
+            {{ option.name }}
+          </option>
+        </Field>
+        <ErrorMessage name="contactSource" class="text-secondary-red text-sm" />
+      </label>
     </div>
     <div>
-      <BaseTextarea v-model="form.other" label="其他需求" placeholder="請詳盡說明您的需求" />
+      <p
+        class="block mb-3.5 text-gray-33 after:content-['*'] after:ml-0.5 after:text-primary-orange"
+      >
+        詢問內容（可複選）
+      </p>
+      <div class="flex flex-wrap gap-x-5 gap-y-3.5">
+        <Field
+          v-for="option in contactReasonOptions"
+          v-model="form.contactReasons"
+          type="checkbox"
+          name="contactReasons"
+          :value="option.value"
+          label="詢問內容"
+          rules="required"
+          v-slot="{ field }"
+        >
+          <label class="flex items-center">
+            <input
+              v-model="form.contactReasons"
+              v-bind="field"
+              type="checkbox"
+              :value="option.value"
+              name="contactReasons"
+              label="詢問內容選項"
+              class="w-4 h-4 border border-gray-d4 checked:bg-primary-orange checked:text-primary-orange checked:ring-transparent focus:ring-transparent focus:border-gray-9f"
+            />
+            <span class="ps-2 text-sm">{{ option.label }}</span>
+          </label>
+        </Field>
+        <ErrorMessage name="contactReasons" class="text-secondary-red text-sm" />
+      </div>
     </div>
-    <div class="w-1/3 self-end">
+    <div class="md:mt-2.5">
+      <label>
+        <p class="block mb-2 md:mb-3.5 text-gray-33">其他需求</p>
+        <Field v-model="form.other" name="other" v-slot="{ field }">
+          <textarea
+            v-bind="field"
+            rows="4"
+            name="other"
+            placeholder="請詳盡說明您的需求"
+            class="block px-4 py-2 w-full text-gray-66 placeholder:text-gray-d4 border border-gray-d4 rounded-md focus:ring-secondary-yellow focus:border-secondary-yellow"
+          ></textarea>
+        </Field>
+      </label>
+    </div>
+    <div class="w-full md:w-1/3 md:self-end">
       <button
         type="submit"
-        class="block w-full py-3 bg-primary-orange text-secondary-white rounded-md hover:opacity-90 ease-in duration-50"
+        class="block w-full py-2.5 bg-primary-orange text-secondary-white rounded-md hover:opacity-90 ease-in duration-50"
       >
-        選擇方案
+        送出表單
       </button>
     </div>
-  </form>
+  </Form>
+  <ModalSuccess ref="successModal" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import BaseRadio from '@/components/general/base/BaseRadio.vue'
-import BaseRadioGroup from '@/components/general/base/BaseRadioGroup.vue'
-import BaseCheckbox from '@/components/general/base/BaseCheckbox.vue'
-import BaseCheckboxGroup from '@/components/general/base/BaseCheckboxGroup.vue'
-import BaseInput from '@/components/general/base/BaseInput.vue'
-import BaseSelect from '@/components/general/base/BaseSelect.vue'
-import BaseTextarea from '@/components/general/base/BaseTextarea.vue'
 import {
   contactCityOptions,
   contactOperationOptions,
@@ -112,23 +236,26 @@ import {
   contactReasonOptions,
   contactSourceOptions
 } from '@/data/contact'
+import ModalSuccess from './ModalSuccess.vue'
 
 export default defineComponent({
+  inheritAttrs: false,
   components: {
-    BaseRadio,
-    BaseRadioGroup,
-    BaseCheckbox,
-    BaseCheckboxGroup,
-    BaseInput,
-    BaseSelect,
-    BaseTextarea
+    ModalSuccess
+  },
+  props: {
+    // 方案名稱
+    planName: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
       form: {
         contactStoreName: '',
         contactName: '',
-        contactCity: '',
+        contactCity: '請選擇',
         contactOperation: '已開業',
         contactEmail: '',
         contactPhone: '',
@@ -144,16 +271,24 @@ export default defineComponent({
       contactSourceOptions
     }
   },
+  watch: {
+    planName(name: string) {
+      const currentReasons = this.form.contactReasons
+
+      if (currentReasons.includes(name)) return
+      else this.form.contactReasons = [...currentReasons, name]
+    }
+  },
   methods: {
-    updateContactReasons(option: string) {
-      if (this.form.contactReasons.includes(option)) {
-        this.form.contactReasons = this.form.contactReasons.filter((item) => item !== option)
-      } else {
-        this.form.contactReasons.push(option)
-      }
+    // 送出表單
+    submitForm() {
+      this.openSuccessModal()
     },
-    onSubmit(values: any) {
-      console.log(JSON.stringify(values, null, 2))
+    // 開啟成功訊息燈箱
+    openSuccessModal() {
+      setTimeout(() => {
+        ;(this.$refs.successModal as typeof ModalSuccess).open()
+      }, 500)
     }
   }
 })
