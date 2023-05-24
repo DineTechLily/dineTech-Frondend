@@ -59,7 +59,7 @@
     </div>
 
     <!-- Main Container -->
-    <div class="col-span-5 md:col-span-4 mx-4">
+    <div class="col-span-5 md:col-span-4 mx-10">
       <router-view />
     </div>
   </div>
