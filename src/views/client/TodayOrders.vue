@@ -39,15 +39,41 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { apiGetTodayOrders } from '@/apis/client'
+import { mapState } from 'pinia'
+import { useClientStore } from '@/stores/clientStore'
 
 export default defineComponent({
   data() {
-    return {}
+    return {
+      orderList: []
+    }
+  },
+  computed: {
+    ...mapState(useClientStore, ['tempTableId'])
   },
   methods: {
     backToMainMenu() {
       this.$router.push({ path: '/client/main-menu' })
+    },
+    async getTodayOrders() {
+      try {
+        const { data } = await apiGetTodayOrders(this.tempTableId)
+        this.orderList = this.flattenNestedArray(data.data)
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    flattenNestedArray(nestedArray: any[]): any[] {
+      return nestedArray.reduce((flattenedArray: any[], currentItem: any) => {
+        if (Array.isArray(currentItem)) {
+          return flattenedArray.concat(this.flattenNestedArray(currentItem))
+        } else {
+          return flattenedArray.concat(currentItem)
+        }
+      }, [])
     }
-  }
+  },
+  created() {}
 })
 </script>
