@@ -1,44 +1,42 @@
-interface Meal {
-  order_id: string;
+export interface Meal {
+  _id: string;
   category: string;
   name: string;
   price: number;
-  quantity: number;
   description: string;
   img: string;
+  number: number;
 }
 
-export interface MealInfo extends Meal{
+export interface MealInfo extends Meal {
   customization: [{
     name: string;
-    value: string;
     type: string;
     options: [{
       name: string;
-      value: string;
       price: number;
     }]
-  },{
+  } | {
     name: string;
-    value: string;
     type: string;
     price: number;
   }];
 }
 
 export interface TempMeal extends Meal {
-  total: number;
-  customization: [];
+  order_id: string;
+  total_price: number;
+  cust: Array<TempOption> | []
 }
+
+export interface TempMeals extends Array<TempMeal> {}
 
 export interface RadioOptions {
   name: string
-  value: string
   type: string
   options?: [
     {
       name: string
-      value: string
       price: number
     }
   ]
@@ -46,9 +44,11 @@ export interface RadioOptions {
 
 export interface CheckboxOptions {
   name: string
-  value: string
   type: string
   price?: number
 }
 
-export type OrderStatus = 'notYetOrdered' | 'preparing' | 'canceled' | 'delivered' | 'checkout' | 'completed';
+export interface TempOption {
+  name: string
+  price: number
+}

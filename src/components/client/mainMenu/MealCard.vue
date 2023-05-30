@@ -6,10 +6,10 @@
     @click="openMealModal()"
   >
     <img :src="meal.img" alt="" class="w-[201px] h-[193px]" />
-    <p class="text-lg">{{ meal.name }}</p>
+    <p class="text-lg truncate">{{ meal.name }}</p>
     <div class="flex items-center justify-start gap-x-2">
       <span class="text-sm text-gray-9f">目前剩餘</span>
-      <span class="text-sm text-primary-blue font-medium">{{ meal.quantity }}</span>
+      <span class="text-sm text-primary-blue font-medium">{{ meal.stock }}</span>
       <span class="text-xl font-medium ms-auto">$ {{ dollar }}</span>
     </div>
   </div>
@@ -18,10 +18,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapState, mapActions } from 'pinia'
+import { useClientStore } from '@/stores/clientStore'
 import { formatPriceToTWD } from '@/utils'
-import { mapActions } from 'pinia'
-import { useMealStore } from '@/stores/mealStore'
 import MealModal from '@/components/client/mainMenu/MealModal.vue'
+import type { MealInfo, TempMeal } from '@/types/mealTypes'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -44,8 +45,9 @@ export default defineComponent({
     }
   },
   computed: {
+    ...mapState(useClientStore, ['tempOrderId']),
     isDisabled(): Boolean {
-      return this.disabled || this.meal.quantity === 0
+      return this.disabled || this.meal.number === 0
     },
     styleList(): String {
       return `${this.styleDisabled} ${this.styleClicked}`
@@ -63,23 +65,34 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions(useMealStore, ['setMealInfo', 'setTempMeal']),
+    ...mapActions(useClientStore, ['setMealInfo', 'setTempMeal']),
     openMealModal() {
       if (this.isDisabled) return
 
       this.clicked = true
-      this.setMealInfo(this.meal)
-      this.setTempMeal({ ...this.meal, quantity: 1, customization: [] })
-      ;(this.$refs.mealModal as typeof MealModal).open()
+      this.setMeal()
+      ;(this.$refs.mealModal as typeof MealModal).open('add')
     },
     closeModal() {
       this.clicked = false
     },
     addMealToCart() {
       this.clicked = false
+    },
+    setMeal() {
+      const { customization, _id, ...others } = this.meal
+      const temp = {
+        number: 1,
+        cust: [],
+        order_id: this.tempOrderId,
+        total_price: this.meal.price
+      }
+
+      this.setMealInfo(this.meal as MealInfo)
+      this.setTempMeal({ ...others, ...temp } as TempMeal)
     }
   }
 })
 </script>
 
-<style scss scoped></style>
+<style lang="scss" scoped></style>

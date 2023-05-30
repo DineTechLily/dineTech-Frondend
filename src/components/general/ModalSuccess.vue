@@ -50,7 +50,7 @@ export default defineComponent({
 })
 </script>
 
-<style scss scoped>
+<style lang="scss" scoped>
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;

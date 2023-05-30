@@ -9,6 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "lib": ["ES6", "ES2016", "ES2017.string", "DOM"],
   }
 }
