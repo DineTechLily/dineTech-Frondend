@@ -14,6 +14,7 @@
       <div class="flex justify-end">
         <button
           class="bg-primary-blue text-white border shadow-md rounded-lg px-3 py-2 text-sm mr-6"
+          @click="showAlert"
         >
           新增商品
         </button>
@@ -68,10 +69,16 @@
         </table>
       </div>
     </div>
-    <ProductAddVue />
+    <ProductAdd v-show="show" />
   </main>
 </template>
 
 <script lang="ts" setup>
-import ProductAddVue from '../../components/admin/ProductAdd.vue'
+import ProductAdd from '@/components/admin/ProductAdd.vue'
+import { ref } from 'vue'
+
+const show = ref(false)
+const showAlert = () => {
+  show.value = !show.value
+}
 </script>
