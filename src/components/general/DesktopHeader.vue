@@ -6,10 +6,12 @@
   >
     <div class="sm:px-10 lg:px-20 2xl:px-60 mx-auto flex items-center h-[4.5rem]">
       <h1>
-        <img
-          src="@/assets/images/home/home-header-logo.svg"
-          alt="DineTech 餐飲 iPad POS 點餐系統 Logo"
-        />
+        <a href="https://dinetech-frondend.onrender.com">
+          <img
+            src="@/assets/images/home/home-header-logo.svg"
+            alt="DineTech 餐飲 iPad POS 點餐系統 Logo"
+          />
+        </a>
       </h1>
       <nav class="ms-auto flex items-center space-x-8 text-sm">
         <div>
