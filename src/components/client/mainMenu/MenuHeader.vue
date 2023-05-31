@@ -26,26 +26,27 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapState } from 'pinia'
-import { useMealStore } from '@/stores/mealStore'
+import { useClientStore } from '@/stores/clientStore'
 
 export default defineComponent({
   data() {
     return {
       meal: {
-        categories: ['套餐', '主餐', '甜點', '飲料'],
-        activeTab: '套餐'
+        categories: ['主餐', '甜點', '飲料'],
+        activeTab: '主餐'
       }
     }
   },
   computed: {
-    ...mapState(useMealStore, ['menuOrderMessage'])
+    ...mapState(useClientStore, ['menuOrderMessage'])
   },
   methods: {
     changeCategory(category: string) {
       this.meal.activeTab = category
+      this.$emit('changeCategory', category)
     }
   }
 })
 </script>
 
-<style scss scoped></style>
+<style lang="scss" scoped></style>

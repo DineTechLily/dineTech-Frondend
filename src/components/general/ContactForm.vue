@@ -127,7 +127,7 @@
           營業狀態
         </p>
         <div class="flex gap-x-4 ps-2 md:mt-3">
-          <label v-for="option in contactOperationOptions">
+          <label v-for="option in contactOperationOptions" :key="option.value">
             <Field
               v-model="form.contactOperation"
               name="contactOperation"

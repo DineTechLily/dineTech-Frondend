@@ -1,5 +1,14 @@
 <template>
-  <div class="flex items-center justify-center absolute inset-0">
+  <div class="flex items-center justify-center absolute inset-0 bg-primary-bg">
+    <loading
+      v-model:active="overlay.isLoading"
+      :can-cancel="true"
+      :is-full-page="true"
+      :height="80"
+      :width="80"
+      color="#FF9900"
+      :opacity="0.6"
+    />
     <Form
       v-bind="$attrs"
       class="flex flex-col gap-y-4 bg-secondary-white p-12 max-w-[730px] shadow-[0_4px_24px_rgba(0,0,0,0.1)] rounded-3xl"
@@ -14,8 +23,8 @@
             桌次
           </h4>
           <Field
-            v-model="form.desk"
-            name="desk"
+            v-model="form.table"
+            name="table"
             label="桌次"
             as="select"
             size="5"
@@ -39,8 +48,8 @@
             人數/位
           </h4>
           <Field
-            v-model="form.attendance"
-            name="attendance"
+            v-model="form.people"
+            name="people"
             label="人數/位"
             as="select"
             size="5"
@@ -104,7 +113,7 @@
           <p>3. 禁止抽菸：我們的餐廳是禁菸場所，請您遵守相關規定。</p>
           <p>4. 帶走服務：我們也提供帶走服務，如果您想帶走一些美食回家，歡迎詢問我們的工作人員。</p>
           <br />
-          <p>祝福您今日用餐愉快！</p>
+          <p>祝您今日用餐愉快！</p>
         </div>
       </div>
     </Form>
@@ -113,21 +122,37 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { mapActions } from 'pinia'
+import { useClientStore } from '@/stores/clientStore'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
 
 export default defineComponent({
   inheritAttrs: false,
+  components: {
+    Loading
+  },
   data() {
     return {
+      overlay: {
+        isLoading: false
+      },
       form: {
-        desk: '',
-        attendance: '1'
+        table: 1,
+        people: 1
       }
     }
   },
   methods: {
+    ...mapActions(useClientStore, ['getCustomerId']),
     // 送出表單
-    submitForm(val: String) {
+    async submitForm() {
+      this.overlay.isLoading = true
+
+      await this.getCustomerId(this.form)
       this.$emit('submit:checkIn', this.form)
+
+      this.overlay.isLoading = false
     },
     // 回到進入頁
     backToLanding() {
@@ -140,9 +165,18 @@ export default defineComponent({
     // 取得時間
     getTime(h: number = 0, m: number = 0) {
       const now = new Date()
-      const hour = now.getHours()
-      const minute = now.getMinutes()
-      return `${hour + h}:${minute + m}`
+      const hour = now.getHours() + h
+      const minute = now.getMinutes() + m
+
+      // Adjust hour and minute if they exceed their respective limits
+      const adjustedHour = hour < 0 ? 24 + hour : hour % 24
+      const adjustedMinute = minute < 0 ? 60 + minute : minute % 60
+
+      // Format the time with leading zeros if necessary
+      const formattedHour = String(adjustedHour).padStart(2, '0')
+      const formattedMinute = String(adjustedMinute).padStart(2, '0')
+
+      return `${formattedHour}:${formattedMinute}`
     }
   }
 })
