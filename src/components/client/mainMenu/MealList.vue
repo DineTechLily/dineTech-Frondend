@@ -3,14 +3,14 @@
     <div
       v-if="meal.number > 0"
       v-bind="$attrs"
-      class="flex justify-between gap-x-2 py-1.5 px-2 bg-gray-e9 rounded-md"
+      class="flex justify-between gap-x-1 py-1.5 px-2 bg-gray-e9 rounded-md"
       @click="handleClick"
     >
-      <div class="flex flex-col max-w-[45%]">
+      <div class="flex flex-col max-w-[43%]">
         <p class="text-lg leading-6 truncate">{{ meal.name }}</p>
         <span class="text-sm text-gray-9f truncate empty:hidden">{{ customization }}</span>
       </div>
-      <div class="flex gap-x-4">
+      <div class="flex justify-between gap-x-3">
         <span class="text-base">X {{ meal.number }}</span>
         <span class="text-base">$ {{ dollar }}</span>
         <button type="button" class="text-lg" @click.stop="deleteItem(meal._id)">
