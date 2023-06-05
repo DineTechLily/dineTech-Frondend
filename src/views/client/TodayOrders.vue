@@ -18,14 +18,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="align-top border-b">
+            <tr class="align-top border-b" v-for="item in orderList" :key="item._id">
               <td class="text-start py-2">
-                <p>德式脆皮豬腳</p>
-                <p class="text-gray-9f text-sm">小辣 / 起司</p>
+                <p>{{ item.name }}</p>
+                <p class="text-gray-9f text-sm">{{ handleCustomization(item.cust) }}</p>
               </td>
-              <td class="py-2">X 1</td>
-              <td class="py-2">$500</td>
-              <td class="py-2">已送達</td>
+              <td class="py-2">X {{ item.number }}</td>
+              <td class="py-2">$ {{ handlePrice(item.total_price) }}</td>
+              <td class="py-2">{{ item.finished ? '已送達' : '準備中' }}</td>
             </tr>
           </tbody>
         </table>
@@ -40,19 +40,26 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { apiGetTodayOrders } from '@/apis/client'
-import { mapState } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
+import type { TempOption } from '@/types/mealTypes'
+import type { OrderList } from '@/types/orderTypes'
+import { formatPriceToTWD } from '@/utils'
 
 export default defineComponent({
   data() {
     return {
-      orderList: []
+      orderList: [] as OrderList
     }
   },
   computed: {
-    ...mapState(useClientStore, ['tempTableId'])
+    ...mapState(useClientStore, ['tempTableId']),
+    totalPrice(): number {
+      return this.orderList.reduce((acc, cur) => acc + cur.total_price, 0)
+    }
   },
   methods: {
+    ...mapActions(useClientStore, ['setOrdersTotal']),
     backToMainMenu() {
       this.$router.push({ path: '/client/main-menu' })
     },
@@ -60,20 +67,29 @@ export default defineComponent({
       try {
         const { data } = await apiGetTodayOrders(this.tempTableId)
         this.orderList = this.flattenNestedArray(data.data)
+        this.setOrdersTotal(this.totalPrice)
       } catch (err) {
         console.error(err)
       }
     },
-    flattenNestedArray(nestedArray: any[]): any[] {
-      return nestedArray.reduce((flattenedArray: any[], currentItem: any) => {
+    flattenNestedArray<T>(nestedArray: T[]): T[] {
+      return nestedArray.reduce((flattenedArray: T[], currentItem: T) => {
         if (Array.isArray(currentItem)) {
           return flattenedArray.concat(this.flattenNestedArray(currentItem))
         } else {
           return flattenedArray.concat(currentItem)
         }
       }, [])
+    },
+    handlePrice(price: number): string {
+      return formatPriceToTWD(price)
+    },
+    handleCustomization(cust: TempOption[]): string {
+      return cust.map((option: TempOption) => option.name).join(' / ')
     }
   },
-  created() {}
+  created() {
+    this.getTodayOrders()
+  }
 })
 </script>

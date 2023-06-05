@@ -1,10 +1,10 @@
 export interface PostFeedback {
-  quality: Number,
-  process: Number,
-  speed: Number,
-  flavor: Number,
-  price: Number,
-  sanitation: Number,
-  impress: Number,
-  feedback: String,
+  quality: number,
+  process: number,
+  speed: number,
+  flavor: number,
+  price: number,
+  sanitation: number,
+  impress: number,
+  feedback: string,
 }

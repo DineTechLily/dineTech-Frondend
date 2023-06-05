@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showModal" class="fixed inset-0 bg-primary-bg z-20">
+  <div v-if="showModal" class="fixed inset-0 bg-primary-bg z-40">
     <div class="flex justify-center items-center h-full w-full">
       <div
         class="flex flex-col items-center gap-y-4 p-12 w-[730px] bg-secondary-white rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.1)]"
@@ -7,10 +7,11 @@
         <p class="text-2xl font-bold">結帳請至櫃台</p>
         <p class="flex items-center gap-x-4">
           <span class="text-xl">今日消費金額為</span>
-          <span class="text-3.5xl font-black text-primary-blue">$ 1,430</span>
+          <span class="text-3.5xl font-black text-primary-blue">$ {{ dollar }}</span>
         </p>
         <p class="text-gray-9f text-base text-center">
-          我們的服務人員將會協助您完成結帳程序。<br />
+          我們的服務人員將會協助您完成結帳程序。
+          <br />
           再次感謝您的蒞臨，期待您的下次光臨！
         </p>
         <p class="flex items-center gap-x-6 mt-2">
@@ -38,10 +39,19 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import modalMixin from '@/mixins/modalMixin'
+import { mapState } from 'pinia'
+import { useClientStore } from '@/stores/clientStore'
+import { formatPriceToTWD } from '@/utils'
 
 export default defineComponent({
   inheritAttrs: false,
   mixins: [modalMixin],
+  computed: {
+    ...mapState(useClientStore, ['ordersTotal']),
+    dollar() {
+      return formatPriceToTWD(this.ordersTotal)
+    }
+  },
   methods: {
     toFeedbackPage() {
       this.$router.push({ path: '/client/feedback' })

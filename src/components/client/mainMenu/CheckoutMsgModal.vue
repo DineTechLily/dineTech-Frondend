@@ -34,6 +34,9 @@
 import { defineComponent } from 'vue'
 import CheckoutModal from './CheckoutModal.vue'
 import modalMixin from '@/mixins/modalMixin'
+import { apiGetTodayOrders } from '@/apis/client'
+import { mapState, mapActions } from 'pinia'
+import { useClientStore } from '@/stores/clientStore'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -41,13 +44,28 @@ export default defineComponent({
     CheckoutModal
   },
   mixins: [modalMixin],
-  data() {
-    return {}
+  computed: {
+    ...mapState(useClientStore, ['tempTableId'])
   },
   methods: {
-    checkout() {
+    ...mapActions(useClientStore, ['setOrdersTotal']),
+    async checkout() {
+      await this.getTotalPriceOfToday()
       this.close()
       ;(this.$refs.checkoutModal as typeof CheckoutModal).open()
+    },
+    async getTotalPriceOfToday() {
+      try {
+        const { data } = await apiGetTodayOrders(this.tempTableId)
+        const totalPrice = data.data.reduce((acc: number, cur: any) => {
+          const arrayTotal = cur.reduce((acc: number, obj: any) => acc + obj.total_price, 0)
+          return acc + arrayTotal
+        }, 0)
+
+        this.setOrdersTotal(totalPrice)
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 })

@@ -18,18 +18,23 @@
           <button
             type="button"
             class="w-1/2 py-4 px-6 rounded-md bg-secondary-yellow flex justify-center items-center gap-x-2"
-            @click="openCheckoutMsgModal"
+            @click="checkOut"
           >
-            <span class="material-icons-outlined text-secondary-black text-lg"
-              >monetization_on</span
-            >
+            <span class="material-icons-outlined text-secondary-black text-lg">
+              monetization_on
+            </span>
             <span class="text-secondary-black text-lg">結帳</span>
           </button>
         </div>
         <div
           class="h-[57%] xl:h-[60%] py-3 px-4 bg-gray-f7 flex flex-col gap-y-2.5 rounded-md overflow-auto"
         >
-          <MealList v-for="meal in tempCart" :key="meal._id" :meal="meal" />
+          <MealList
+            v-for="meal in tempCart"
+            :key="meal._id"
+            :meal="meal"
+            @click:list="$emit('click:list')"
+          />
         </div>
         <div class="h-[17%] bg-gray-f7 rounded-md flex flex-col justify-center gap-y-2 py-3 px-4">
           <div class="flex items-center justify-between">
@@ -46,9 +51,19 @@
           </div>
         </div>
         <button
+          v-if="isEmptyCart"
+          type="button"
+          class="w-full py-4 px-6 rounded-md bg-gray-f7 flex justify-center items-center gap-x-2"
+          disabled
+        >
+          <span class="material-icons-outlined text-gray-9f text-2xl">shopping_cart</span>
+          <span class="text-gray-9f text-lg font-bold">送出訂單</span>
+        </button>
+        <button
+          v-else
           type="button"
           class="w-full py-4 px-6 rounded-md bg-primary-orange flex justify-center items-center gap-x-2"
-          @click="checkOut"
+          @click="sendOrder"
         >
           <span class="material-icons-outlined text-secondary-white text-2xl">shopping_cart</span>
           <span class="text-secondary-white text-lg font-bold">送出訂單</span>
@@ -77,6 +92,7 @@ import { formatPriceToTWD } from '@/utils'
 import MealList from './MealList.vue'
 import CheckoutMsgModal from '@/components/client/mainMenu/CheckoutMsgModal.vue'
 import MenuIconBar from '@/components/client/mainMenu/MenuIconBar.vue'
+import { apiPostOrder } from '@/apis/client'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -86,21 +102,72 @@ export default defineComponent({
     CheckoutMsgModal
   },
   computed: {
-    ...mapState(useClientStore, ['isEmptyCart', 'sidebarExpand', 'tempCart']),
-    totalPrice(): String {
+    ...mapState(useClientStore, [
+      'isEmptyCart',
+      'sidebarExpand',
+      'tempCart',
+      'tempOrderId',
+      'tempTableId'
+    ]),
+    totalPrice(): string {
       return formatPriceToTWD(this.tempCart.reduce((acc, cur) => acc + cur.total_price, 0))
     },
-    serviceCharge(): String {
+    serviceCharge(): string {
       return formatPriceToTWD(this.tempCart.reduce((acc, cur) => acc + cur.total_price, 0) * 0.1)
     },
-    summaryPrice(): String {
+    summaryPrice(): string {
       return formatPriceToTWD(this.tempCart.reduce((acc, cur) => acc + cur.total_price, 0) * 1.1)
+    },
+    buttonView() {
+      switch (status) {
+        case 'empty':
+          return {
+            icon: 'shopping_cart',
+            text: '送出訂單',
+            buttonColor: 'bg-gray-f7',
+            event: () => {}
+          }
+        case 'loading':
+          return {
+            icon: 'shopping_cart',
+            text: '訂單已送出',
+            event: () => {}
+          }
+        case 'done':
+          return {
+            icon: 'done',
+            text: '送出訂單',
+            event: () => {}
+          }
+        default:
+          return {
+            icon: 'shopping_cart',
+            text: '送出訂單',
+            event: this.checkOut
+          }
+      }
     }
   },
   methods: {
-    ...mapActions(useClientStore, ['toggleSidebar', 'checkOut']),
-    openCheckoutMsgModal() {
+    ...mapActions(useClientStore, [
+      'toggleSidebar',
+      'setOrderStatus',
+      'resetTempData',
+      'setTempOrderId',
+      'setOrdersTotal'
+    ]),
+    async checkOut() {
       ;(this.$refs.checkoutMsgModal as typeof CheckoutMsgModal).open()
+    },
+    async sendOrder() {
+      const { data } = await apiPostOrder({
+        order_id: this.tempOrderId,
+        table_id: this.tempTableId
+      })
+
+      this.setTempOrderId(data.data.new_order_id)
+      this.setOrderStatus('preparing')
+      this.resetTempData()
     },
     toTodayOrderPage() {
       this.$router.push({ path: '/client/today-orders' })
