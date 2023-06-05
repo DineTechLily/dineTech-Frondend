@@ -42,7 +42,7 @@ const clientRoutes: RouteRecordRaw = {
     {
       path: 'feedback',
       name: 'clientFeedback',
-      component: () => import('@/views/client/Feedback.vue'),
+      component: () => import('@/views/client/FeedbackView.vue'),
       meta: {
         title: '意見回饋',
       }

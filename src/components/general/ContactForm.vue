@@ -177,6 +177,7 @@
       <div class="flex flex-wrap gap-x-5 gap-y-3.5">
         <Field
           v-for="option in contactReasonOptions"
+          :key="option.label" 
           v-model="form.contactReasons"
           type="checkbox"
           name="contactReasons"
