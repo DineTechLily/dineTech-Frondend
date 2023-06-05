@@ -61,7 +61,7 @@
         </div>
         <div class="mt-6 flex justify-center">
           <button
-            @click="goBack"
+            @click="submitForm"
             class="block w-full justify-center text-white bg-primary-orange hover:opacity-90 font-medium rounded-lg text-lg py-2.5"
           >
             確定
@@ -74,26 +74,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { apiPostFeedback } from '@/apis/client'
 
 export default defineComponent({
-  setup() {
-    const isOpen = ref(false)
-
-    const openModal = () => {
-      isOpen.value = true
-    }
-
-    const closeModal = () => {
-      isOpen.value = false
-    }
-    return {
-      isOpen,
-      openModal,
-      closeModal
-    }
-  },
   data() {
     return {
+      isOpen: false,
       form: {
         quality: 0,
         process: 0,
@@ -103,7 +89,7 @@ export default defineComponent({
         sanitation: 0,
         impress: 0,
         feedback: ''
-      } as { [key: string]: number | string },
+      } as any,
       satisfaction: ['非常滿意', '滿意', '普通', '不滿意', '非常不滿意'],
       radioFields: [
         {
@@ -138,7 +124,19 @@ export default defineComponent({
     }
   },
   methods: {
-    goBack() {
+    openModal() {
+      this.isOpen = true
+    },
+    closeModal() {
+      this.isOpen = false
+    },
+    async submitForm() {
+      try {
+        const result = await apiPostFeedback(this.form)
+      } catch (error) {
+        console.error(error)
+      }
+      this.closeModal()
       this.$router.push({ path: '/client' })
     }
   }
