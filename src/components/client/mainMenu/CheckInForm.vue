@@ -1,13 +1,15 @@
 <template>
   <div class="flex items-center justify-center absolute inset-0 bg-primary-bg">
-    <loading
-      v-model:active="overlay.isLoading"
+    <Loading
+      v-model:active="isLoading"
       :can-cancel="true"
       :is-full-page="true"
-      :height="80"
-      :width="80"
+      :height="128"
+      :width="128"
+      loader="spinner"
       color="#FF9900"
-      :opacity="0.6"
+      background-color="#000"
+      :opacity="0.5"
     />
     <Form
       v-bind="$attrs"
@@ -126,6 +128,8 @@ import { mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
+import { useStatusStore } from '@/stores/statusStore'
+import { mapWritableState } from 'pinia'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -134,25 +138,25 @@ export default defineComponent({
   },
   data() {
     return {
-      overlay: {
-        isLoading: false
-      },
       form: {
         table: 1,
         people: 1
       }
     }
   },
+  computed: {
+    ...mapWritableState(useStatusStore, ['isLoading'])
+  },
   methods: {
     ...mapActions(useClientStore, ['getCustomerId']),
     // 送出表單
     async submitForm() {
-      this.overlay.isLoading = true
+      this.isLoading = true
 
       await this.getCustomerId(this.form)
       this.$emit('submit:checkIn', this.form)
 
-      this.overlay.isLoading = false
+      this.isLoading = false
     },
     // 回到進入頁
     backToLanding() {

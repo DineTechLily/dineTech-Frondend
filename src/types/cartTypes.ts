@@ -1,13 +1,18 @@
-import type { RadioOptions, CheckboxOptions, TempMeal } from '@/types/mealTypes';
+import type { TempOption, MealPayload } from '@/types/mealTypes';
 
 export interface CartEditItem {
-  edit_id: String,
-  number: Number,
-  total_price: Number,
-  cust: Array<RadioOptions | CheckboxOptions> | [],
+  edit_id: string,
+  number: number,
+  total_price: number,
+  cust: Array<TempOption> | []
 }
 
 export interface CartItemId {
-  edit_id: String,
+  edit_id: string,
 }
 
+export interface CartItem extends MealPayload {
+  _id: string
+}
+
+export interface TempCart extends Array<CartItem> {}

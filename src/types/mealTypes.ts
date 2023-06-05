@@ -1,14 +1,14 @@
 export interface Meal {
-  _id: string;
   category: string;
   name: string;
   price: number;
   description: string;
   img: string;
-  number: number;
+  stock?: number;
 }
 
-export interface MealInfo extends Meal {
+export interface TempMeal extends Meal {
+  _id: string;
   customization: [{
     name: string;
     type: string;
@@ -23,13 +23,12 @@ export interface MealInfo extends Meal {
   }];
 }
 
-export interface TempMeal extends Meal {
+export interface MealPayload extends Meal {
   order_id: string;
   total_price: number;
+  number: number;
   cust: Array<TempOption> | []
 }
-
-export interface TempMeals extends Array<TempMeal> {}
 
 export interface RadioOptions {
   name: string
@@ -37,7 +36,7 @@ export interface RadioOptions {
   options?: [
     {
       name: string
-      price: number
+      price?: number
     }
   ]
 }
@@ -50,5 +49,5 @@ export interface CheckboxOptions {
 
 export interface TempOption {
   name: string
-  price: number
+  price?: number
 }

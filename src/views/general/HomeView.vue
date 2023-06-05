@@ -1,12 +1,18 @@
 <template>
   <MobileHeader v-if="isMobile()" />
   <DesktopHeader v-else />
-  <section class="bg-primary-bg md:bg-[url('@/assets/images/home/home-bg-landing.png')] bg-no-repeat bg-cover">
-    <div class="reveal-content px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto md:h-[calc(100vh-72px)] flex flex-col">
+  <section
+    class="bg-primary-bg md:bg-[url('@/assets/images/home/home-bg-landing.png')] bg-no-repeat bg-cover overflow-hidden"
+  >
+    <div
+      class="reveal-content px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto md:h-[calc(100vh-72px)] flex flex-col"
+    >
       <div class="flex justify-between flex-col md:flex-row items-center pt-6 md:pt-10">
         <h1 class="md:mb-40 whitespace-nowrap">
           <span class="block w-4 h-4 bg-primary-blue rounded-md"></span>
-          <p class="text-3.5xl md:text-5xl md:leading-normal font-bold text-primary-orange leading-normal">
+          <p
+            class="text-3.5xl md:text-5xl md:leading-normal font-bold text-primary-orange leading-normal"
+          >
             聰明用餐，輕鬆經營
           </p>
           <p class="text-base leading-relaxed md:text-2.5xl md:leading-normal">
@@ -16,23 +22,32 @@
             設計的 iPad POS 點餐系統。
           </p>
         </h1>
-        <img class="mt-6 md:mt-8" :src="bannerUrl.landing" alt="DineTech 宣傳橫幅" />
+        <img
+          class="mt-6 md:mt-8 md:max-w-lg xl:max-w-full"
+          :src="bannerUrl.landing"
+          alt="DineTech 宣傳橫幅"
+        />
       </div>
       <div class="reveal-content flex flex-col items-center relative py-6 md:py-0 xl:py-10">
         <span class="text-sm text-gray-9f mt-auto my-4">往下滾動查看更多</span>
         <a href="#features" class="hover:opacity-90">
           <span
-            class="material-icons-outlined text-white bg-primary-orange p-1.5 rounded-full animate-bounce cursor-pointer">
+            class="material-icons-outlined text-white bg-primary-orange p-1.5 rounded-full animate-bounce cursor-pointer"
+          >
             arrow_downward
           </span>
         </a>
       </div>
     </div>
   </section>
-  <section class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 relative">
+  <section
+    class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 relative"
+  >
     <span id="features" class="absolute -top-16 invisible"></span>
     <div class="reveal-content text-center mb-8">
-      <p class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium mx-auto rounded-md mb-3">
+      <p
+        class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium mx-auto rounded-md mb-3"
+      >
         產品特色
       </p>
       <h2 class="text-2xl md:text-3.5xl font-bold md:mt-4 md:mb-2">
@@ -48,10 +63,15 @@
         <span class="md:block">24/7/365 全年無休的遠端技術支援服務，讓您用的放心！</span>
       </p>
     </div>
-    <div class="flex flex-col md:flex-row justify-between items-center rounded-3xl overflow-hidden bg-gray-f7">
+    <div
+      class="flex flex-col md:flex-row justify-between items-center rounded-3xl overflow-hidden bg-gray-f7"
+    >
       <ul class="reveal-content flex flex-col gap-y-6 md:gap-y-8 py-6 px-3 md:p-12">
-        <li v-for="feature in features" :key="feature.title"
-          class="reveal-content flex flex-col md:flex-row items-center md:items-start">
+        <li
+          v-for="feature in features"
+          :key="feature.title"
+          class="reveal-content flex flex-col md:flex-row items-center md:items-start"
+        >
           <img :src="feature.iconUrl" alt="產品特色裝飾圖示" />
 
           <div class="flex flex-col items-center md:items-start md:ps-6">
@@ -70,7 +90,8 @@
   <section class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9">
     <div class="reveal-content mb-6 md:mb-8 text-center md:text-start">
       <p
-        class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium rounded-md mb-3 text-center mx-auto md:ms-0">
+        class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium rounded-md mb-3 text-center mx-auto md:ms-0"
+      >
         產品體驗
       </p>
       <h2 class="text-2xl md:text-3.5xl font-bold md:my-4">優異的使用體驗</h2>
@@ -82,9 +103,12 @@
       </p>
     </div>
     <div
-      class="flex flex-col-reverse md:flex-row justify-between rounded-3xl overflow-hidden gap-y-6 md:gap-0 md:gap-x-6">
+      class="flex flex-col-reverse md:flex-row justify-between rounded-3xl overflow-hidden gap-y-6 md:gap-0 md:gap-x-6"
+    >
       <img class="object-fill self-stretch" :src="bannerUrl.experience" alt="產品體驗直幅" />
-      <div class="flex flex-col justify-between items-start w-full bg-gray-f7 rounded-3xl py-6 px-3 md:p-12">
+      <div
+        class="flex flex-col justify-between items-start w-full bg-gray-f7 rounded-3xl py-6 px-3 md:p-12"
+      >
         <div class="flex flex-col items-center md:items-start md:w-10/12 mb-6 md:mb-8">
           <h3 class="reveal-content text-gray-66 font-bold text-2xl mb-4">
             我們引以為傲的點餐流程！
@@ -93,14 +117,22 @@
             系統提供簡單易懂的點餐流程，讓您的員工快速上手，大幅提升點餐效率。快速、準確、方便，每一位客人都能夠享受到無煩惱的用餐體驗。
           </p>
         </div>
-        <img class="reveal-content object-scale-down" :src="bannerUrl.experience2" alt="產品體驗橫幅" />
+        <img
+          class="reveal-content object-scale-down"
+          :src="bannerUrl.experience2"
+          alt="產品體驗橫幅"
+        />
       </div>
     </div>
   </section>
-  <section class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 bg-primary-bg relative">
+  <section
+    class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 bg-primary-bg relative"
+  >
     <span id="pricing" class="absolute -top-16 invisible"></span>
     <div class="reveal-content text-center mb-6 md:mb-14">
-      <p class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium mx-auto rounded-md mb-3">
+      <p
+        class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium mx-auto rounded-md mb-3"
+      >
         價格方案
       </p>
       <h2 class="text-2xl md:text-3.5xl font-bold md:my-4">您絕對負擔的起的價格！</h2>
@@ -109,9 +141,15 @@
       </p>
     </div>
     <div class="flex flex-col md:flex-row justify-center items-center gap-6 mx-9 md:mx-0">
-      <div v-for="plan in plans" :key="plan.name" :class="plan.customClass"
-        class="w-full md:w-1/3 border-4 rounded-3xl bg-secondary-white overflow-hidden">
-        <div class="reveal-content flex flex-col items-center p-6 pb-4 md:pt-10 md:px-9 md:pb-6 border-b border-gray-e9">
+      <div
+        v-for="plan in plans"
+        :key="plan.name"
+        :class="plan.customClass"
+        class="w-full md:w-1/3 border-4 rounded-3xl bg-secondary-white overflow-hidden"
+      >
+        <div
+          class="reveal-content flex flex-col items-center p-6 pb-4 md:pt-10 md:px-9 md:pb-6 border-b border-gray-e9"
+        >
           <p class="flex items-center gap-x-4">
             <span class="material-icons-outlined bg-gray-f7 text-gray-66 p-2 md:p-3 rounded-full">
               {{ plan.iconName }}
@@ -129,15 +167,19 @@
           <p class="mb-2.5 md:mb-4">DineTech 提供以下功能：</p>
           <div class="flex flex-col gap-y-2 md:gap-y-3 mb-7 min-h-[108px] md:min-h-[132px]">
             <p v-for="item in plan.offerings" :key="item[0]" class="flex items-center gap-x-3.5">
-              <span class="w-5 h-5 md:w-6 md:w-6 material-icons-outlined text-secondary-yellow rounded-full">
+              <span
+                class="w-5 h-5 md:w-6 md:w-6 material-icons-outlined text-secondary-yellow rounded-full"
+              >
                 check_circle
               </span>
               <span class="font-bold text-sm">{{ item }}</span>
             </p>
           </div>
-          <a href="#contact"
+          <a
+            href="#contact"
             class="block w-full py-3 bg-secondary-yellow md:bg-gray-e9 text-gray-33 text-center rounded-md md:hover:bg-secondary-yellow ease-in duration-50 cursor-pointer"
-            @click="selectPlan(plan.name)">
+            @click="selectPlan(plan.name)"
+          >
             選擇方案
           </a>
         </div>
@@ -147,7 +189,8 @@
   <section class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9">
     <div class="reveal-content mb-6 md:mb-8 text-center md:text-start">
       <p
-        class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium rounded-md mb-3 text-center mx-auto md:ms-0">
+        class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium rounded-md mb-3 text-center mx-auto md:ms-0"
+      >
         強大功能
       </p>
       <h2 class="text-2xl md:text-3.5xl font-bold md:my-4">多樣化的系統管理功能</h2>
@@ -160,13 +203,19 @@
         </span>
       </p>
     </div>
-    <div class="flex flex-col-reverse md:flex-row gap-y-6 md:gap-0 justify-between rounded-3xl overflow-hidden">
+    <div
+      class="flex flex-col-reverse md:flex-row gap-y-6 md:gap-0 justify-between rounded-3xl overflow-hidden"
+    >
       <img class="object-fill self-stretch" :src="bannerUrl.management" alt="功能特點直幅" />
       <div
-        class="flex flex-col justify-between items-start w-full bg-gray-f7 rounded-3xl gap-y-6 md:gap-0 md:gap-x-6 py-6 px-3 md:p-12">
+        class="flex flex-col justify-between items-start w-full bg-gray-f7 rounded-3xl gap-y-6 md:gap-0 md:gap-x-6 py-6 px-3 md:p-12"
+      >
         <ul class="flex flex-col gap-y-6 md:gap-y-8">
-          <li v-for="feature in managementFeatures" :key="feature.title"
-            class="reveal-content flex flex-col md:flex-row items-center">
+          <li
+            v-for="feature in managementFeatures"
+            :key="feature.title"
+            class="reveal-content flex flex-col md:flex-row items-center"
+          >
             <img :src="feature.iconUrl" alt="功能特點圖示" />
             <div class="flex flex-col items-center md:items-start md:ps-6">
               <h3 class="text-base md:text-lg font-bold">{{ feature.title }}</h3>
@@ -179,10 +228,14 @@
       </div>
     </div>
   </section>
-  <section class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 relative">
+  <section
+    class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 relative"
+  >
     <span id="support" class="absolute -top-16 invisible"></span>
     <div class="reveal-content text-center mb-6 md:mb-8">
-      <p class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium mx-auto rounded-md mb-3">
+      <p
+        class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium mx-auto rounded-md mb-3"
+      >
         技術支援
       </p>
       <h2 class="text-2xl md:text-3.5xl font-bold md:my-4">全年無休的技術服務</h2>
@@ -200,15 +253,20 @@
       <img class="object-fill self-stretch" :src="bannerUrl.support" alt="技術支援橫幅" />
     </div>
   </section>
-  <section class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 bg-primary-bg relative">
+  <section
+    class="px-3 sm:px-10 lg:px-20 2xl:px-60 mx-auto py-6 md:py-12 border-b border-gray-e9 bg-primary-bg relative"
+  >
     <span id="contact" class="absolute -top-16 invisible"></span>
     <div class="flex flex-col items-center md:items-start md:flex-row gap-x-6">
       <div class="reveal-content md:w-1/3">
         <p
-          class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium text-center rounded-md mb-3 mx-auto md:ms-0">
+          class="w-20 h-8 leading-8 bg-primary-orange text-sm text-white font-medium text-center rounded-md mb-3 mx-auto md:ms-0"
+        >
           預約諮詢
         </p>
-        <h2 class="text-2xl md:text-3.5xl font-bold md:leading-tight md:my-4 text-center md:text-start md:my-4">
+        <h2
+          class="text-2xl md:text-3.5xl font-bold md:leading-tight md:my-4 text-center md:text-start md:my-4"
+        >
           讓我們的諮詢團隊與您一起規劃出最合適的 POS 方案。
         </h2>
         <p class="text-sm md:text-base text-gray-9f mt-3 mb-6 md:my-2 text-center md:text-start">

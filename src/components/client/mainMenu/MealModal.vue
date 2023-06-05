@@ -6,18 +6,18 @@
           <Form
             class="flex flex-col items-start gap-y-4 p-8 rounded-xl bg-secondary-white relative"
           >
-            <img :src="tempMeal.img" alt="商家廣告圖片" class="rounded-xl h-[286px] m-auto" />
+            <img :src="tempMeal.img" alt="料理圖片" class="rounded-xl h-[286px] m-auto" />
             <h2 class="text-2.5xl font-bold">{{ tempMeal.name }}</h2>
             <p class="text-base text-gray-1d">
               {{ tempMeal.description }}
             </p>
-            <div v-if="radioOptions.length > 0">
+            <div v-if="radioOptions?.length > 0">
               <div v-for="option in radioOptions" :key="option.name">
                 <p class="block mb-1 text-gray-66">{{ option.name }}</p>
                 <div class="flex gap-x-8 ps-2 mt-2">
                   <label v-for="optionValue in option.options" :key="optionValue.name">
                     <Field
-                      v-model="radioField"
+                      v-model="radioValue"
                       type="radio"
                       name="radioOptions"
                       :value="optionValue.name"
@@ -29,12 +29,13 @@
                 </div>
               </div>
             </div>
-            <div v-if="checkboxOptions.length > 0">
+            <div v-if="checkboxOptions?.length > 0">
               <p class="block mb-3.5 text-gray-66">加購配料</p>
               <div class="flex flex-wrap ps-2 gap-x-8 gap-y-3.5">
                 <Field
                   v-for="option in checkboxOptions"
-                  v-model="tempMeal.cust"
+                  :key="option.name"
+                  v-model="form.cust"
                   type="checkbox"
                   :name="option.name"
                   :value="{ name: option.name, price: option.price }"
@@ -43,7 +44,7 @@
                 >
                   <label class="flex items-center">
                     <input
-                      v-model="tempMeal.cust"
+                      v-model="form.cust"
                       v-bind="field"
                       type="checkbox"
                       :name="option.name"
@@ -67,7 +68,7 @@
                 >
                   remove
                 </span>
-                <span class="px-2">{{ tempMeal.number }}</span>
+                <span class="px-2">{{ form.number }}</span>
                 <span
                   class="material-icons-outlined text-gray-66 text-xl py-1.5 px-2 cursor-pointer"
                   @click="addQuantity"
@@ -99,8 +100,8 @@
 import { defineComponent } from 'vue'
 import { mapState, mapWritableState, mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
-import type { RadioOptions, CheckboxOptions } from '@/types/mealTypes'
-import { apiPostCart } from '@/apis/client'
+import type { RadioOptions, CheckboxOptions, TempOption } from '@/types/mealTypes'
+import { apiPostCart, apiPatchCart } from '@/apis/client'
 
 type ModalType = 'add' | 'edit'
 interface ButtonView {
@@ -112,35 +113,50 @@ interface ButtonView {
 export default defineComponent({
   data() {
     return {
+      form: {
+        number: 1,
+        cust: [] as TempOption[],
+        price: 0,
+        total_price: 0
+      },
       modalType: '' as ModalType,
       showModal: false,
-      radioField: '不辣'
+      radioField: ''
     }
   },
   computed: {
-    ...mapState(useClientStore, ['mealInfo']),
-    ...mapWritableState(useClientStore, ['tempMeal', 'sidebarExpand']),
+    ...mapState(useClientStore, ['tempMeal', 'tempOrderId', 'tempEditCartItem']),
+    ...mapWritableState(useClientStore, ['sidebarExpand']),
+    // 單選客製化選項
     radioOptions(): RadioOptions[] {
-      return this.mealInfo.customization?.filter((option: any) => option.type === 'radio')
+      return this.tempMeal.customization?.filter((option) => option.type === 'radio')
     },
+    // 複選客製化選項
     checkboxOptions(): CheckboxOptions[] {
-      return this.mealInfo.customization?.filter((option: any) => option.type === 'checkbox')
+      return this.tempMeal.customization?.filter((option) => option.type === 'checkbox')
     },
-    radioValue() {
-      const category = this.tempMeal.category
-      switch (category) {
-        case 'pasta':
-          return {
-            name: this.radioField,
-            price: 0
-          }
-        default:
-          return {
-            name: this.radioField,
-            price: 0
-          }
+    // 單選客製化選項值
+    radioValue: {
+      get(): string {
+        return this.radioField || this.defaultRadioValue
+      },
+      set(val: string) {
+        this.radioField = val
       }
     },
+    // 單選客製化選項預設值
+    defaultRadioValue(): string {
+      if (
+        this.radioOptions &&
+        this.radioOptions.length > 0 &&
+        this.radioOptions[0].options &&
+        this.radioOptions[0].options.length > 0
+      ) {
+        return this.radioOptions[0].options[0].name
+      }
+      return ''
+    },
+    // 按鈕樣式
     buttonView(): ButtonView {
       return this.modalType === 'add'
         ? {
@@ -155,74 +171,127 @@ export default defineComponent({
           }
     }
   },
+  watch: {
+    tempMeal() {
+      this.form.price = this.tempMeal.price
+      this.form.total_price = this.tempMeal.price
+    }
+  },
   methods: {
-    ...mapActions(useClientStore, ['getCart', 'setCartItem']),
+    ...mapActions(useClientStore, ['getCart', 'resetTempMeal']),
+    // 開啟燈箱
     open(type: string) {
       this.modalType = type as ModalType
       this.showModal = true
+
+      if (type === 'edit') {
+        this.form.number = this.tempEditCartItem.number
+        this.form.cust = this.tempEditCartItem.cust
+
+        if (this.radioOptions?.length > 0) {
+          this.radioField = this.tempEditCartItem.cust.slice(-1)[0]?.name ?? ''
+        }
+      }
     },
     // 關閉燈箱
     close() {
+      this.resetForm()
+      this.resetTempMeal()
       this.showModal = false
-      this.$emit('close')
     },
-    confirm() {
-      this.showModal = false
-      this.$emit('confirm', this.tempMeal)
-    },
+    // 新增購物車
     async addToCart() {
-      // this.tempMeal.cust.push(this.radioValue)
+      this.addCustomRadioOption()
+      this.calcTotalPrice()
+
+      const { _id, stock, customization, ...others } = this.tempMeal
+      const payload = {
+        order_id: this.tempOrderId,
+        number: this.form.number,
+        total_price: this.form.total_price,
+        cust: this.form.cust,
+        ...others
+      }
 
       try {
-        await apiPostCart(this.tempMeal)
+        await apiPostCart(payload)
         this.getCart()
-        this.confirm()
         this.sidebarExpand = true
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
+
+      this.close()
     },
+    // 編輯購物車
     async editCartItem() {
+      this.removeAllRadioOption()
+      this.addCustomRadioOption()
+      this.calcTotalPrice()
+
+      const payload = {
+        edit_id: this.tempMeal._id,
+        number: this.form.number,
+        total_price: this.form.total_price,
+        cust: this.form.cust
+      }
+
       try {
-        await this.setCartItem(this.tempMeal)
+        await apiPatchCart(payload)
         this.getCart()
-        this.confirm()
       } catch (err) {
-        console.log(err)
+        console.error(err)
+      }
+
+      this.close()
+    },
+    // 新增單選客製化選項
+    addCustomRadioOption() {
+      if (this.radioValue) {
+        this.form.cust.push({ name: this.radioValue, price: 0 })
       }
     },
+    // 移除單選客製化選項
+    removeAllRadioOption() {
+      this.form.cust = this.form.cust.filter((obj) =>
+        this.radioOptions.every((item) => {
+          if (item.options) {
+            return !item.options.some((option) => option.name === obj.name)
+          }
+        })
+      )
+    },
+    // 增加數量
     addQuantity() {
-      this.tempMeal.number++
-      this.calcTotalPrice()
+      this.form.number++
     },
+    // 減少數量
     minusQuantity() {
-      if (this.tempMeal.number > 1) this.tempMeal.number--
-      this.calcTotalPrice()
+      if (this.form.number > 1) this.form.number--
     },
+    // 計算總價
     calcTotalPrice() {
-      this.tempMeal.total_price = this.tempMeal.number * this.tempMeal.price
+      this.handleCustomizationPrice()
+
+      this.form.total_price = this.form.number * this.form.price
+    },
+    // 計算客製化選項價格
+    handleCustomizationPrice() {
+      if (this.form.cust.length > 0) {
+        for (const option of this.form.cust) {
+          this.form.price += option.price ?? 0
+        }
+      }
+    },
+    resetForm() {
+      this.form = {
+        number: 1,
+        cust: [] as TempOption[],
+        price: 0,
+        total_price: 0
+      }
+      this.radioField = ''
     }
-    // handleDuplicateOptions() {
-    //   let transformedData = []
-    //   let labelNames = new Set()
-
-    //   for (let item of this.tempMeal.cust) {
-    //     if (item.hasOwnProperty('label')) {
-    //       let labelName = item['label']
-    //       if (labelNames.has(labelName)) {
-    //         continue
-    //       } else {
-    //         labelNames.add(labelName)
-    //       }
-    //     }
-    //     if (item.hasOwnProperty('label')) {
-    //       delete item.label
-    //     }
-    //     transformedData.push(item)
-    //   }
-
-    //   this.tempMeal.cust = transformedData
-    // }
   }
 })
 </script>

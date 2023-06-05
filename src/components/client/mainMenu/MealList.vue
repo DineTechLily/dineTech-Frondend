@@ -4,7 +4,7 @@
       v-if="meal.number > 0"
       v-bind="$attrs"
       class="flex justify-between gap-x-2 py-1.5 px-2 bg-gray-e9 rounded-md"
-      @click="openMealModal"
+      @click="handleClick"
     >
       <div class="flex flex-col max-w-[45%]">
         <p class="text-lg leading-6 truncate">{{ meal.name }}</p>
@@ -19,45 +19,60 @@
       </div>
     </div>
   </Transition>
-  <MealModal ref="mealModal" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
-import MealModal from '@/components/client/mainMenu/MealModal.vue'
 import { formatPriceToTWD } from '@/utils'
-import type { TempMeal } from '@/types/mealTypes'
+import type { MealPayload } from '@/types/mealTypes'
+import { apiDeleteCart, apiGetMenuById } from '@/apis/client'
 
 export default defineComponent({
   inheritAttrs: false,
-  components: {
-    MealModal
-  },
   props: {
     meal: {
       type: Object,
-      default: () => ({} as TempMeal)
+      default: () => ({} as MealPayload)
     }
   },
   computed: {
-    dollar(): String {
+    dollar(): string {
       return formatPriceToTWD(this.meal.total_price)
     },
-    customization(): String {
-      return this.meal.cust?.map((option: TempMeal) => option.name).join(' / ')
+    customization(): string {
+      return this.meal.cust?.map((option: MealPayload) => option.name).join(' / ')
     }
   },
   methods: {
-    ...mapActions(useClientStore, ['setTempMeal', 'deleteCartItem', 'getCart']),
-    openMealModal() {
-      this.setTempMeal(this.meal as TempMeal)
-      ;(this.$refs.mealModal as typeof MealModal).open('edit')
+    ...mapActions(useClientStore, ['setTempMeal', 'getCart', 'setTempEditCartItem']),
+    async handleClick() {
+      await this.updateTempMeal()
+      this.$emit('click:list')
     },
-    deleteItem(mealId: string) {
-      this.deleteCartItem(mealId)
-      this.getCart()
+    async updateTempMeal() {
+      try {
+        const { data } = await apiGetMenuById(this.meal.product_id)
+        const meal = data.data_item?.pop()
+        this.setTempMeal({ ...meal, _id: this.meal._id })
+        this.setTempEditCartItem({
+          edit_id: this.meal._id,
+          number: this.meal.number,
+          total_price: this.meal.total_price,
+          cust: this.meal.cust
+        })
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    async deleteItem(mealId: string) {
+      try {
+        await apiDeleteCart({ edit_id: mealId })
+        this.getCart()
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 })
