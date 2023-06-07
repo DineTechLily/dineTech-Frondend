@@ -77,16 +77,17 @@
                 </span>
               </div>
             </div>
-            <button
+            <client-button
+              :is-loading="buttonIsLoading"
               type="button"
-              class="w-full py-3 px-6 rounded-md bg-primary-orange flex justify-center items-center gap-x-2"
+              class="w-full py-3 px-6 rounded-md bg-primary-orange text-secondary-white flex justify-center items-center gap-x-2"
               @click="buttonView.event"
             >
-              <span class="material-icons-outlined text-secondary-white text-2xl">
+              <span class="material-icons-outlined text-2xl leading-none">
                 {{ buttonView.icon }}
               </span>
-              <span class="text-secondary-white text-lg font-bold">{{ buttonView.text }}</span>
-            </button>
+              <span class="text-lg font-bold">{{ buttonView.text }}</span>
+            </client-button>
             <button type="button" class="absolute top-2 end-2 leading-none" @click="close">
               <span class="material-icons-outlined text-secondary-black">close</span>
             </button>
@@ -102,6 +103,7 @@ import { mapState, mapWritableState, mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
 import type { RadioOptions, CheckboxOptions, TempOption } from '@/types/mealTypes'
 import { apiPostCart, apiPatchCart } from '@/apis/client'
+import ClientButton from '../ClientButton.vue'
 
 type ModalType = 'add' | 'edit'
 interface ButtonView {
@@ -111,6 +113,9 @@ interface ButtonView {
 }
 
 export default defineComponent({
+  components: {
+    ClientButton
+  },
   data() {
     return {
       form: {
@@ -121,7 +126,8 @@ export default defineComponent({
       },
       modalType: '' as ModalType,
       showModal: false,
-      radioField: ''
+      radioField: '',
+      buttonIsLoading: false
     }
   },
   computed: {
@@ -203,6 +209,7 @@ export default defineComponent({
     async addToCart() {
       this.addCustomRadioOption()
       this.calcTotalPrice()
+      this.buttonIsLoading = true
 
       const { _id, stock, customization, ...others } = this.tempMeal
       const payload = {
@@ -221,6 +228,7 @@ export default defineComponent({
         console.error(err)
       }
 
+      this.buttonIsLoading = false
       this.close()
     },
     // 編輯購物車
@@ -228,6 +236,7 @@ export default defineComponent({
       this.removeAllRadioOption()
       this.addCustomRadioOption()
       this.calcTotalPrice()
+      this.buttonIsLoading = true
 
       const payload = {
         edit_id: this.tempMeal._id,
@@ -243,6 +252,7 @@ export default defineComponent({
         console.error(err)
       }
 
+      this.buttonIsLoading = false
       this.close()
     },
     // 新增單選客製化選項
@@ -283,6 +293,7 @@ export default defineComponent({
         }
       }
     },
+    // 重置表單
     resetForm() {
       this.form = {
         number: 1,

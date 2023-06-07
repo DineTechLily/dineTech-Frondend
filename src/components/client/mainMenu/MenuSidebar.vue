@@ -29,12 +29,14 @@
         <div
           class="h-[57%] xl:h-[60%] py-3 px-4 bg-gray-f7 flex flex-col gap-y-2.5 rounded-md overflow-auto"
         >
-          <MealList
-            v-for="meal in tempCart"
-            :key="meal._id"
-            :meal="meal"
-            @click:list="$emit('click:list')"
-          />
+          <TransitionGroup name="slide-fade">
+            <MealList
+              v-for="meal in tempCart"
+              :key="meal._id"
+              :meal="meal"
+              @click:list="$emit('click:list')"
+            />
+          </TransitionGroup>
         </div>
         <div class="h-[17%] bg-gray-f7 rounded-md flex flex-col justify-center gap-y-2 py-3 px-4">
           <div class="flex items-center justify-between">
@@ -56,18 +58,23 @@
           class="w-full py-4 px-6 rounded-md bg-gray-f7 flex justify-center items-center gap-x-2"
           disabled
         >
-          <span class="material-icons-outlined text-gray-9f text-2xl">shopping_cart</span>
+          <span class="material-icons-outlined text-gray-9f text-2xl leading-none"
+            >shopping_cart</span
+          >
           <span class="text-gray-9f text-lg font-bold">送出訂單</span>
         </button>
-        <button
+        <client-button
           v-else
+          :isLoading="buttonIsLoading"
           type="button"
-          class="w-full py-4 px-6 rounded-md bg-primary-orange flex justify-center items-center gap-x-2"
+          class="w-full py-4 px-6 rounded-md bg-primary-orange text-secondary-white flex justify-center items-center gap-x-2"
           @click="sendOrder"
         >
-          <span class="material-icons-outlined text-secondary-white text-2xl">shopping_cart</span>
+          <span class="material-icons-outlined text-secondary-white text-2xl leading-none"
+            >shopping_cart</span
+          >
           <span class="text-secondary-white text-lg font-bold">送出訂單</span>
-        </button>
+        </client-button>
       </div>
       <button
         type="button"
@@ -93,13 +100,20 @@ import MealList from './MealList.vue'
 import CheckoutMsgModal from '@/components/client/mainMenu/CheckoutMsgModal.vue'
 import MenuIconBar from '@/components/client/mainMenu/MenuIconBar.vue'
 import { apiPostOrder } from '@/apis/client'
+import ClientButton from '../ClientButton.vue'
 
 export default defineComponent({
   inheritAttrs: false,
   components: {
     MealList,
     MenuIconBar,
-    CheckoutMsgModal
+    CheckoutMsgModal,
+    ClientButton
+  },
+  data() {
+    return {
+      buttonIsLoading: false
+    }
   },
   computed: {
     ...mapState(useClientStore, [
@@ -160,11 +174,14 @@ export default defineComponent({
       ;(this.$refs.checkoutMsgModal as typeof CheckoutMsgModal).open()
     },
     async sendOrder() {
+      this.buttonIsLoading = true
+
       const { data } = await apiPostOrder({
         order_id: this.tempOrderId,
         table_id: this.tempTableId
       })
 
+      this.buttonIsLoading = false
       this.setTempOrderId(data.data.new_order_id)
       this.setOrderStatus('preparing')
       this.resetTempData()
@@ -197,6 +214,20 @@ export default defineComponent({
 
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.6s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
   opacity: 0;
 }
 </style>
