@@ -5,7 +5,10 @@
     :class="styleList"
     @click="handleClick"
   >
-    <img :src="meal.img" alt="" class="w-[201px] h-[193px] rounded-md" />
+    <div
+      class="w-[201px] h-[193px] rounded-md bg-center bg-cover"
+      :style="{ backgroundImage: `url(${meal.img})` }"
+    ></div>
     <p class="text-lg truncate">{{ meal.name }}</p>
     <div class="flex items-center justify-start gap-x-2">
       <span class="text-sm text-gray-9f">目前剩餘</span>
