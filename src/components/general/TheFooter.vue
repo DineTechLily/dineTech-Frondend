@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-secondary-black relative">
+  <footer v-bind="$attrs" class="bg-secondary-black relative">
     <div class="px-3 sm:px-10 lg:px-20 2xl:px-60 py-8 md:py-12">
       <div
         class="flex flex-col md:flex-row items-start md:items-center border-b border-gray-9f pb-1"
@@ -16,7 +16,13 @@
           <a href="#pricing" class="text-gray-d4 hover:opacity-70 ease-in duration-50">價格方案</a>
           <a href="#support" class="text-gray-d4 hover:opacity-70 ease-in duration-50">技術支援</a>
           <a href="#contact" class="text-gray-d4 hover:opacity-70 ease-in duration-50">預約諮詢</a>
-          <a href="#" class="text-gray-d4 hover:opacity-70 ease-in duration-50">系統展示</a>
+          <button
+            type="button"
+            class="text-gray-d4 hover:opacity-70 ease-in duration-50"
+            @click="openRoleSelectionModal"
+          >
+            系統展示
+          </button>
         </nav>
       </div>
       <div class="flex flex-col gap-y-6 md:gap-y-0 mt-3 md:flex-row md:justify-between">
@@ -58,12 +64,18 @@
       </div>
     </button>
   </footer>
+  <ModalRoleSelection ref="roleSelectionModal" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import ModalRoleSelection from '@/components/general/ModalRoleSelection.vue'
 
 export default defineComponent({
+  inheritAttrs: false,
+  components: {
+    ModalRoleSelection
+  },
   methods: {
     // 滾動至頁面頂部
     scrollToTop() {
@@ -71,6 +83,9 @@ export default defineComponent({
       document.body.scrollTop = 0
       // 支援 Chrome, Firefox and Opera
       document.documentElement.scrollTop = 0
+    },
+    openRoleSelectionModal() {
+      ;(this.$refs.roleSelectionModal as typeof ModalRoleSelection).open()
     }
   }
 })
