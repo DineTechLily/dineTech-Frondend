@@ -2,7 +2,7 @@
   <div class="bg-primary-bg h-screen w-screen overflow-hidden">
     <MenuHeader @changeCategory="setMenu" />
     <div class="flex justify-between h-[calc(100%-80px)]">
-      <Transition name="fade">
+      <fade-transition>
         <main v-show="menu.length > 1" class="px-12 py-4 overflow-auto">
           <div class="flex flex-wrap items-center gap-6">
             <MealCard
@@ -13,13 +13,13 @@
             />
           </div>
         </main>
-      </Transition>
+      </fade-transition>
       <MenuSidebar class="w-[340px]" @click:list="openMealModal('edit')" />
     </div>
   </div>
-  <Transition name="fade">
+  <fade-transition>
     <CheckInForm v-if="!isCheckIn" />
-  </Transition>
+  </fade-transition>
   <MealModal ref="mealModal" />
 </template>
 
@@ -34,6 +34,7 @@ import MealCard from '@/components/client/mainMenu/MealCard.vue'
 import { apiGetMenu } from '@/apis/client'
 import type { Menu } from '@/types/menuTypes'
 import MealModal from '@/components/client/mainMenu/MealModal.vue'
+import FadeTransition from '@/components/client/FadeTransition.vue'
 
 export default defineComponent({
   components: {
@@ -41,7 +42,8 @@ export default defineComponent({
     MenuHeader,
     MenuSidebar,
     MealCard,
-    MealModal
+    MealModal,
+    FadeTransition
   },
   data() {
     return {
@@ -91,14 +93,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
