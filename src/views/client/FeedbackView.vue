@@ -73,8 +73,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { apiPostFeedback } from '@/apis/client'
+import { useClientStore } from '@/stores/clientStore'
+import { mapActions } from 'pinia'
 
 export default defineComponent({
   data() {
@@ -124,6 +126,7 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions(useClientStore, ['resetState']),
     openModal() {
       this.isOpen = true
     },
@@ -132,10 +135,11 @@ export default defineComponent({
     },
     async submitForm() {
       try {
-        const result = await apiPostFeedback(this.form)
+        await apiPostFeedback(this.form)
       } catch (error) {
         console.error(error)
       }
+      this.resetState()
       this.closeModal()
       this.$router.push({ path: '/client' })
     }

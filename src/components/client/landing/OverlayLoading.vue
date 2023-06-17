@@ -1,5 +1,5 @@
 <template>
-  <Transition name="fade">
+  <fade-transition duration="0.3s">
     <div
       v-if="showOverlay"
       class="h-screen w-screen bg-primary-orange absolute top-0 left-0 z-50 flex items-center justify-center"
@@ -11,13 +11,17 @@
         <p class="text-2xl text-secondary-white font-semibold">讀取中...</p>
       </div>
     </div>
-  </Transition>
+  </fade-transition>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import FadeTransition from '@/components/client/FadeTransition.vue'
 
 export default defineComponent({
+  components: {
+    FadeTransition
+  },
   data() {
     return {
       showOverlay: false
@@ -45,13 +49,3 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

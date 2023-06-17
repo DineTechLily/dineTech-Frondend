@@ -1,5 +1,5 @@
 <template>
-  <Transition name="fade">
+  <fade-transition>
     <div v-if="showModal" v-bind="$attrs" class="fixed inset-0 bg-[rgba(0,0,0,0.3)] z-20">
       <div class="flex justify-center items-center h-full w-full">
         <div
@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-  </Transition>
+  </fade-transition>
   <CheckoutModal ref="checkoutModal" />
 </template>
 
@@ -37,11 +37,13 @@ import modalMixin from '@/mixins/modalMixin'
 import { apiGetTodayOrders } from '@/apis/client'
 import { mapState, mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
+import FadeTransition from '@/components/client/FadeTransition.vue'
 
 export default defineComponent({
   inheritAttrs: false,
   components: {
-    CheckoutModal
+    CheckoutModal,
+    FadeTransition
   },
   mixins: [modalMixin],
   computed: {
@@ -70,15 +72,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

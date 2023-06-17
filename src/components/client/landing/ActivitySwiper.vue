@@ -12,9 +12,9 @@
       />
     </swiper-slide>
   </swiper-container>
-  <Transition name="fade">
+  <fade-transition>
     <ActivityModal ref="activityModal" :activity="tempActivity" />
-  </Transition>
+  </fade-transition>
 </template>
 
 <script lang="ts">
@@ -22,6 +22,7 @@ import { defineComponent } from 'vue'
 import { register } from 'swiper/element/bundle'
 import { activityList } from '@/data/activity/activityList'
 import ActivityModal from '@/components/client/landing/ActivityModal.vue'
+import FadeTransition from '@/components/client/FadeTransition.vue'
 
 // 註冊 Swiper custom element
 register()
@@ -37,7 +38,8 @@ interface Activity {
 export default defineComponent({
   inheritAttrs: false,
   components: {
-    ActivityModal
+    ActivityModal,
+    FadeTransition
   },
   data() {
     return {
@@ -61,14 +63,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

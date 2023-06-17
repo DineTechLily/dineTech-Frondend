@@ -1,5 +1,5 @@
 <template>
-  <Transition name="fade">
+  <fade-transition>
     <div v-if="showModal" class="fixed inset-0 bg-[rgba(0,0,0,0.3)] z-20">
       <div class="flex justify-center items-center h-full w-full">
         <div
@@ -64,13 +64,17 @@
         </div>
       </div>
     </div>
-  </Transition>
+  </fade-transition>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import FadeTransition from '@/components/client/FadeTransition.vue'
 
 export default defineComponent({
+  components: {
+    FadeTransition
+  },
   data() {
     return {
       showModal: false,
@@ -113,15 +117,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
