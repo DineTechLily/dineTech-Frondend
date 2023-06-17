@@ -39,7 +39,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useClientStore, ['tempMeal']),
-    isDisabled(): Boolean {
+    isDisabled(): boolean {
       return this.disabled || this.meal.number === 0
     },
     styleList(): string {

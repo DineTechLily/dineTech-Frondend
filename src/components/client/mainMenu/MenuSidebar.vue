@@ -17,10 +17,15 @@
           </button>
           <button
             type="button"
-            class="w-1/2 py-4 px-6 rounded-md bg-secondary-yellow flex justify-center items-center gap-x-2"
+            class="w-1/2 py-4 px-6 rounded-md flex justify-center items-center gap-x-2"
+            :class="orderStatus === 'notYetOrdered' ? 'bg-gray-f7' : 'bg-secondary-yellow'"
+            :disabled="orderStatus === 'notYetOrdered'"
             @click="checkOut"
           >
-            <span class="material-icons-outlined text-secondary-black text-lg">
+            <span
+              class="material-icons-outlined text-lg"
+              :class="orderStatus === 'notYetOrdered' ? 'text-gray-9f' : 'text-secondary-black'"
+            >
               monetization_on
             </span>
             <span class="text-secondary-black text-lg">結帳</span>
@@ -85,9 +90,9 @@
       </button>
     </div>
   </Transition>
-  <Transition name="fade">
+  <fade-transition duration="0.2s">
     <MenuIconBar v-show="!sidebarExpand" />
-  </Transition>
+  </fade-transition>
   <CheckoutMsgModal ref="checkoutMsgModal" />
 </template>
 
@@ -96,11 +101,12 @@ import { defineComponent } from 'vue'
 import { mapState, mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
 import { formatPriceToTWD } from '@/utils'
+import { apiPostOrder } from '@/apis/client'
 import MealList from './MealList.vue'
 import CheckoutMsgModal from '@/components/client/mainMenu/CheckoutMsgModal.vue'
 import MenuIconBar from '@/components/client/mainMenu/MenuIconBar.vue'
-import { apiPostOrder } from '@/apis/client'
-import ClientButton from '../ClientButton.vue'
+import ClientButton from '@/components/client/ClientButton.vue'
+import FadeTransition from '@/components/client/FadeTransition.vue'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -108,7 +114,8 @@ export default defineComponent({
     MealList,
     MenuIconBar,
     CheckoutMsgModal,
-    ClientButton
+    ClientButton,
+    FadeTransition
   },
   data() {
     return {
@@ -121,7 +128,8 @@ export default defineComponent({
       'sidebarExpand',
       'tempCart',
       'tempOrderId',
-      'tempTableId'
+      'tempTableId',
+      'orderStatus'
     ]),
     totalPrice(): string {
       return formatPriceToTWD(this.tempCart.reduce((acc, cur) => acc + cur.total_price, 0))
@@ -131,35 +139,6 @@ export default defineComponent({
     },
     summaryPrice(): string {
       return formatPriceToTWD(this.tempCart.reduce((acc, cur) => acc + cur.total_price, 0) * 1.1)
-    },
-    buttonView() {
-      switch (status) {
-        case 'empty':
-          return {
-            icon: 'shopping_cart',
-            text: '送出訂單',
-            buttonColor: 'bg-gray-f7',
-            event: () => {}
-          }
-        case 'loading':
-          return {
-            icon: 'shopping_cart',
-            text: '訂單已送出',
-            event: () => {}
-          }
-        case 'done':
-          return {
-            icon: 'done',
-            text: '送出訂單',
-            event: () => {}
-          }
-        default:
-          return {
-            icon: 'shopping_cart',
-            text: '送出訂單',
-            event: this.checkOut
-          }
-      }
     }
   },
   methods: {
@@ -205,16 +184,6 @@ export default defineComponent({
   width: 0;
   padding-left: 0;
   padding-right: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 
 .slide-fade-enter-active {

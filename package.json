@@ -19,6 +19,7 @@
     "lodash": "^4.17.21",
     "material-icons": "^1.13.6",
     "pinia": "^2.0.32",
+    "pinia-plugin-persistedstate": "^3.1.0",
     "swiper": "^9.3.2",
     "vee-validate": "^4.9.3",
     "vue": "^3.2.47",

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center absolute inset-0 bg-primary-bg">
+  <div v-if="!isCheckIn" class="flex items-center justify-center absolute inset-0 bg-primary-bg">
     <Loading
       v-model:active="isLoading"
       :can-cancel="true"
@@ -11,7 +11,7 @@
       background-color="#000"
       :opacity="0.5"
     />
-    <Form
+    <VForm
       v-bind="$attrs"
       class="flex flex-col gap-y-4 bg-secondary-white p-12 max-w-[730px] shadow-[0_4px_24px_rgba(0,0,0,0.1)] rounded-3xl"
       @submit="submitForm"
@@ -24,7 +24,7 @@
           >
             桌次
           </h4>
-          <Field
+          <VField
             v-model="form.table"
             name="table"
             label="桌次"
@@ -41,7 +41,7 @@
             >
               第 {{ option }} 桌
             </option>
-          </Field>
+          </VField>
         </label>
         <label class="w-1/2">
           <h4
@@ -49,7 +49,7 @@
           >
             人數/位
           </h4>
-          <Field
+          <VField
             v-model="form.people"
             name="people"
             label="人數/位"
@@ -66,7 +66,7 @@
             >
               {{ option }}
             </option>
-          </Field>
+          </VField>
         </label>
       </div>
       <div class="flex">
@@ -118,7 +118,7 @@
           <p>祝您今日用餐愉快！</p>
         </div>
       </div>
-    </Form>
+    </VForm>
   </div>
 </template>
 
@@ -126,10 +126,10 @@
 import { defineComponent } from 'vue'
 import { mapActions } from 'pinia'
 import { useClientStore } from '@/stores/clientStore'
+import { useStatusStore } from '@/stores/statusStore'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
-import { useStatusStore } from '@/stores/statusStore'
-import { mapWritableState } from 'pinia'
+import { mapWritableState, mapState } from 'pinia'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -145,7 +145,8 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapWritableState(useStatusStore, ['isLoading'])
+    ...mapWritableState(useStatusStore, ['isLoading']),
+    ...mapState(useClientStore, ['isCheckIn'])
   },
   methods: {
     ...mapActions(useClientStore, ['getCustomerId']),

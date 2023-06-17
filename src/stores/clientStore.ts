@@ -14,74 +14,81 @@ export const useClientStore = defineStore('client', {
       tempEditCartItem: {} as CartEditItem,
       orderStatus: 'notYetOrdered' as OrderStatus,
       ordersTotal: 0,
-      sidebarExpand: false,
+      sidebarExpand: false
     }
+  },
+  persist: {
+    storage: sessionStorage,
+    paths: ['tempOrderId', 'tempTableId', 'tempCart', 'orderStatus', 'ordersTotal', 'sidebarExpand'],
   },
   getters: {
     menuOrderMessage(state) {
       switch (state.orderStatus) {
         case 'notYetOrdered':
-          return '您尚未點餐';
+          return '您尚未點餐'
         case 'preparing':
-          return '餐點製作中';
+          return '餐點製作中'
         case 'canceled':
-          return '餐點已取消';
+          return '餐點已取消'
         case 'delivered':
-          return '餐點已送達';
+          return '餐點已送達'
         case 'checkout':
-          return '訂單結帳中';
+          return '訂單結帳中'
         case 'completed':
-          return '訂單已完成';
+          return '訂單已完成'
         default:
           return '系統維護中'
       }
     },
     isEmptyCart(state) {
-      return state.tempCart.length === 0;
+      return state.tempCart.length === 0
     },
     isCheckIn(state) {
-      return state.tempTableId !== 0;
+      return state.tempTableId !== 0
     }
   },
   actions: {
     setOrderStatus(status: OrderStatus) {
-      this.orderStatus = status;
+      this.orderStatus = status
     },
     setTempMeal(meal: TempMeal) {
-      this.tempMeal = meal;
+      this.tempMeal = meal
     },
     setTempEditCartItem(item: CartEditItem) {
-      this.tempEditCartItem = item;
+      this.tempEditCartItem = item
     },
     setTempOrderId(id: string) {
-      this.tempOrderId = id;
+      this.tempOrderId = id
     },
     setOrdersTotal(total: number) {
-      this.ordersTotal = total;
+      this.ordersTotal = total
     },
     toggleSidebar() {
-      this.sidebarExpand = !this.sidebarExpand;
+      this.sidebarExpand = !this.sidebarExpand
     },
     async getCustomerId(payload: PostGuest) {
-      const { data } = await apiPostGuest(payload);
-      this.tempOrderId = data.data.order_id;
-      this.tempTableId = data.data.table_id;
+      const { data } = await apiPostGuest(payload)
+      this.tempOrderId = data.data.order_id
+      this.tempTableId = data.data.table_id
     },
     async getCart() {
-      const { data } = await apiGetCart(this.tempOrderId);
-      this.tempCart = data.data;
-    },
-    resetCustomerId() {
-      this.tempOrderId = '';
-      this.tempTableId = 0;
+      const { data } = await apiGetCart(this.tempOrderId)
+      this.tempCart = data.data
     },
     resetTempMeal() {
-      this.tempMeal = {} as TempMeal;
+      this.tempMeal = {} as TempMeal
     },
     resetTempData() {
-      this.tempMeal = {} as TempMeal;
-      this.tempCart = [] as TempCart;
-      this.tempEditCartItem = {} as CartEditItem;
+      this.tempMeal = {} as TempMeal
+      this.tempCart = [] as TempCart
+      this.tempEditCartItem = {} as CartEditItem
     },
-  },
+    resetState() {
+      this.tempOrderId = ''
+      this.tempTableId = 0
+      this.orderStatus = 'notYetOrdered'
+      this.ordersTotal = 0
+      this.sidebarExpand = false
+    },
+  }
 })
