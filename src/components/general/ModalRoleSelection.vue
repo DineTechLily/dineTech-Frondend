@@ -51,7 +51,7 @@
               v-for="role in roles"
               :key="role.name"
               :to="{ path: role.path }"
-              class="flex flex-col gap-y-4 items-center border p-8 border-1 bg-secondary-white border-gray-d4 rounded-xl cursor-pointer hover:shadow-[0_4px_24px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition duration-300"
+              class="flex flex-col w-1/2 gap-y-4 items-center border p-8 border-1 bg-secondary-white border-gray-d4 rounded-xl cursor-pointer hover:shadow-[0_4px_24px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition duration-300"
             >
               <img :src="role.imageUrl" :alt="`系統展示 - ${role.name}端進入頁面`" />
               <p class="text-base md:text-lg font-bold">
@@ -88,11 +88,6 @@ export default defineComponent({
           name: '店員',
           path: '/staff/login',
           imageUrl: this.getImageUrl('home/home-demo-role-staff.png')
-        },
-        {
-          name: '店長',
-          path: '/admin/login',
-          imageUrl: this.getImageUrl('home/home-demo-role-admin.png')
         }
       ]
     }

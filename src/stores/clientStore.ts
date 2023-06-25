@@ -19,7 +19,7 @@ export const useClientStore = defineStore('client', {
   },
   persist: {
     storage: sessionStorage,
-    paths: ['tempOrderId', 'tempTableId', 'tempCart', 'orderStatus', 'ordersTotal', 'sidebarExpand'],
+    paths: ['tempOrderId', 'tempTableId', 'tempCart', 'orderStatus', 'ordersTotal', 'sidebarExpand']
   },
   getters: {
     menuOrderMessage(state) {
@@ -89,6 +89,6 @@ export const useClientStore = defineStore('client', {
       this.orderStatus = 'notYetOrdered'
       this.ordersTotal = 0
       this.sidebarExpand = false
-    },
+    }
   }
 })
