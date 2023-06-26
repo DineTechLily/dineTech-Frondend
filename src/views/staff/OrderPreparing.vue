@@ -11,10 +11,12 @@
         <li class="relative bg-white p-4 rounded shadow-lg" v-for="detail in order_details" :key="detail._id">
           <div v-if="detail.finished == 'abandoned'"
             class="rounded absolute bottom-0 left-0 bg-gray-400 opacity-75 w-full h-full flex justify-center items-center">
+            <img src="/cancel_FILL0_wght400_GRAD0_opsz48.png" alt="">
             <p class="text-3xl">棄單</p>
           </div>
           <div v-if="detail.finished == 'true'"
             class="absolute bottom-0 left-0 bg-gray-400 opacity-75 w-full h-full flex justify-center items-center">
+            <img src="/check_circle_FILL0_wght400_GRAD0_opsz48.png" alt="check_circle">
             <p class="text-3xl">已送餐</p>
           </div>
           <div>
@@ -24,10 +26,10 @@
             {{ detail.name }}
           </div>
           <div class="text-xl">
-            <span v-if="detail.cust_name1 != ''">◎{{ detail.cust_name1 }}</span>
-            <span v-if="detail.cust_name2 !=''">、</span>
+            <span v-if="detail.cust_name1 != null">◎{{ detail.cust_name1 }}</span>
+            <span v-if="detail.cust_name2 != null">、</span>
             <span v-if="detail.cust_name2 != ''">{{ detail.cust_name2 }}</span>
-            <span v-if="detail.cust_name3 !=''">、</span>
+            <span v-if="detail.cust_name3 != null">、</span>
             <span v-if="detail.cust_name3 != ''">{{ detail.cust_name3 }}</span>
           </div>
           <div class="flex mt-2 align-bottom">
@@ -59,7 +61,7 @@ export default defineComponent({
     axios
       .get(`${apiUrl}/emp/order/${id}`)
       .then((response) => {
-        this.order_details = response.data.data
+        this.order_details = response.data.data;
       })
   },
   methods: {
@@ -75,10 +77,8 @@ export default defineComponent({
       this.$router.push({ path: '/staff/orders' })
     },
     abandon(detail) {
-      console.log("棄單");
       this.tempDetail = { ...detail };
       const product_id = this.tempDetail._id;
-      console.log(product_id);
       axios({
         method: 'patch',
         url: `${apiUrl}/emp/order/abandon`,
@@ -91,10 +91,8 @@ export default defineComponent({
         )
     },
     serve(detail) {
-      console.log("出餐");
       this.tempDetail = { ...detail };
       const product_id = this.tempDetail._id;
-      console.log(product_id);
       axios({
         method: 'patch',
         url: `${apiUrl}/emp/order`,
@@ -108,7 +106,6 @@ export default defineComponent({
     }
   },
 mounted() {
-  console.log(this.$route.params.id);
 },
 
 })
