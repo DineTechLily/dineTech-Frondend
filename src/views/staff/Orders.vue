@@ -1,6 +1,6 @@
 <template>
-  <header class="h-20 w-full bg-gray-33 px-12 py-2.5 flex">
-    <div class="grid grid-cols-5 gap-72 items-center">
+  <header class="h-20 w-full bg-gray-33 px-12 py-2.5">
+    <div class="flex justify-between items-center">
       <div><router-link to="Orders"><button type="button"
             class="w-[170px] py-4 px-12 text-secondary-white text-lg text-center rounded-md" :class="'bg-primary-orange'">
             訂單管理
@@ -11,12 +11,9 @@
             結帳管理
           </button></router-link>
       </div> -->
-      <div class="invisible"></div>
-      <div class="invisible"></div>
-      <div>
-        <router-link to="Login">
+      <div class="flex justify-end xl:pe-52"><router-link to="Login">
           <button type="button"
-            class="bg-red flex justify-around w-[151px] py-2 text-secondary-white text-xl text-center rounded-full bg-gray-700"
+            class="flex justify-around w-[151px] py-2 text-secondary-white text-xl text-center rounded-full bg-gray-700"
             @click="logout">
             <span class="material-icons-outlined">
               account_circle
@@ -31,7 +28,7 @@
     <div class="preparingOrders overflow-auto h-screen basis-3/4 px-5 py-3">
       <h3 class="text-xl mb-4">今日準備中訂單</h3>
       <ul class="order flex flex-wrap gap-5" v-if="preparingOrders.length != 0">
-        <li class="bg-white p-4 rounded border-t-8 border-primary-orange shadow-lg w-64" v-for="(order, order_id) in preparingOrders" :key="order_id" @click="preparingOrderDetail(order)">
+        <li class="bg-white p-4 rounded border-t-8 border-primary-orange shadow-lg xl:w-64 lg:w-56" v-for="(order, order_id) in preparingOrders" :key="order_id" @click="preparingOrderDetail(order)">
           <div class="table text-3xl mb-2">No.{{ order.table }}</div>
           <div class="clientNum text-xl">用餐人數：{{ order.people }}人</div>
           <div class="orderTime text-xl">點餐時間：{{ order.order_time.split(/[T,.]/)[1]}}</div>
