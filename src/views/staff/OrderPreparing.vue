@@ -7,7 +7,7 @@
       </button>
     </header>
     <main>
-      <ul class="order grid grid-cols-6 gap-4 m-3">
+      <ul class="order grid xl:grid-cols-6 xl:gap-4 md:grid-cols-3 md:gap-2 m-3">
         <li class="relative bg-white p-4 rounded shadow-lg" v-for="detail in order_details" :key="detail._id">
           <div v-if="detail.finished == 'abandoned'"
             class="rounded absolute bottom-0 left-0 bg-gray-400 opacity-75 w-full h-full flex justify-center items-center">
