@@ -23,15 +23,15 @@
       </div>
     </div>
   </header>
-  
   <main class="w-full items-center flex flex-row overflow-y-auto">
     <div class="preparingOrders overflow-auto h-screen basis-3/4 px-5 py-3">
       <h3 class="text-xl mb-4">今日準備中訂單</h3>
       <ul class="order flex flex-wrap gap-5" v-if="preparingOrders.length != 0">
-        <li class="bg-white p-4 rounded border-t-8 border-primary-orange shadow-lg xl:w-64 lg:w-56" v-for="(order, order_id) in preparingOrders" :key="order_id" @click="preparingOrderDetail(order)">
+        <li class="bg-white p-4 rounded border-t-8 border-primary-orange shadow-lg xl:w-64 lg:w-56"
+          v-for="(order, order_id) in preparingOrders" :key="order_id" @click="preparingOrderDetail(order)">
           <div class="table text-3xl mb-2">No.{{ order.table }}</div>
           <div class="clientNum text-xl">用餐人數：{{ order.people }}人</div>
-          <div class="orderTime text-xl">點餐時間：{{ order.order_time.split(/[T,.]/)[1]}}</div>
+          <div class="orderTime text-xl">點餐時間：{{ order.order_time.split(/[T,.]/)[1] }}</div>
         </li>
       </ul>
       <h4 v-else>尚未有準備中訂單</h4>
@@ -49,7 +49,7 @@
           class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-primary-orange focus:border-primary-orange placeholder:請輸入桌號">
       </div>
       <ul class="order">
-        <li class="bg-white p-4 shadow-lg rounded border-t-8 border-gray-400" v-for="servedOrder in servedOrders">
+        <li class="mb-3 bg-white p-4 shadow-lg rounded border-t-8 border-gray-400" v-for="servedOrder in servedOrders">
           <div class="table text-3xl mb-2">No.{{ servedOrder.table }}</div>
           <div class="clientNum text-xl">人數：{{ servedOrder.people }}人</div>
           <div class="orderTime text-xl">點餐時間：{{ servedOrder.time.split(/[T,.]/)[1] }}</div>
@@ -85,7 +85,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import axios from 'axios';
- 
+
 const apiUrl = 'https://dinetech-host2.onrender.com'
 
 export default defineComponent({
@@ -148,7 +148,23 @@ export default defineComponent({
         .catch((error) => {
           console.log(error.response.data.message);
         })
-    }
+    },
+    // ws() {
+    //   const ws = new WebSocket('wss://dinetech-host2.onrender.com');
+    //   console.log(ws);
+    //   ws.addEventListener('open', function () {
+    //     console.log('連結建立成功。')
+    //   });
+    //   ws.onopen = () => {
+    //     console.log('open connection');
+    //   }
+    //   ws.onmessage = function (event) {
+    //     console.log(event);
+    //     const receivedData = event.data;
+    //     console.log('Received message:', receivedData);
+    //     console.log(receivedData.text());      
+    //   };
+    // }
   },
   mounted() {
     this.getPreparingOrders();
