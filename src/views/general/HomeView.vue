@@ -431,7 +431,7 @@ export default defineComponent({
     },
     // 判斷是否為手機裝置
     isMobile(): boolean {
-      return screen.width < 768
+      return window.innerWidth < 768
     },
     // 更新選取方案名稱
     selectPlan(name: string) {

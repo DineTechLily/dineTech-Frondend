@@ -46,21 +46,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import DesktopHeader from '@/components/general/DesktopHeader.vue'
-import MobileHeader from '@/components/general/MobileHeader.vue'
 
 export default defineComponent({
-  components: {
-    DesktopHeader,
-    MobileHeader
-  },
   data() {
     return {}
   },
   methods: {
     // 判斷是否為手機裝置
     isMobile(): boolean {
-      return screen.width < 768
+      return window.innerWidth < 768
     }
   },
   mounted() {

@@ -14,7 +14,7 @@
             ></div>
             <div class="flex flex-col items-start gap-y-4 overflow-y-scroll xl:overflow-y-auto">
               <h2 class="text-2.5xl font-bold">{{ tempMeal.name }}</h2>
-              <p class="text-base text-gray-1d">
+              <p class="max-w-[98%] text-base text-gray-1d">
                 {{ tempMeal.description }}
               </p>
               <div v-if="radioOptions?.length > 0">
