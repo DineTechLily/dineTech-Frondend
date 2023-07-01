@@ -48,7 +48,7 @@
     </div>
     <nav
       :class="menuHeight"
-      class="fixed w-full bg-[#f1ECE8] overflow-hidden transition-height ease-in duration-300"
+      class="fixed top-16 w-full bg-[#f1ECE8] overflow-hidden transition-height ease-in duration-300"
       @click="toggleMenu"
     >
       <div class="flex flex-col items-center gap-y-10 py-12">
