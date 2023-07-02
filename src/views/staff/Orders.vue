@@ -1,24 +1,32 @@
 <template>
   <header class="h-20 w-full bg-gray-33 px-12 py-2.5">
     <div class="flex justify-between items-center">
-      <div><router-link to="Orders"><button type="button"
-            class="w-[170px] py-4 px-12 text-secondary-white text-lg text-center rounded-md" :class="'bg-primary-orange'">
+      <div>
+        <router-link to="Orders"
+          ><button
+            type="button"
+            class="w-[170px] py-4 px-12 text-secondary-white text-lg text-center rounded-md"
+            :class="'bg-primary-orange'"
+          >
             訂單管理
-          </button></router-link>
+          </button></router-link
+        >
       </div>
       <!-- <div> <router-link to="Checkout"><button type="button"
             class="w-[170px] py-4 px-12 text-secondary-white text-lg text-center rounded-md">
             結帳管理
           </button></router-link>
       </div> -->
-      <div class="flex justify-end xl:pe-52"><router-link to="Login">
-          <button type="button"
+      <div class="flex justify-end">
+        <router-link to="Login">
+          <button
+            type="button"
             class="flex justify-around w-[151px] py-2 text-secondary-white text-xl text-center rounded-full bg-gray-700"
-            @click="logout">
-            <span class="material-icons-outlined">
-              account_circle
-            </span>
-            登出</button>
+            @click="logout"
+          >
+            <span class="material-icons-outlined"> account_circle </span>
+            登出
+          </button>
         </router-link>
       </div>
     </div>
@@ -27,11 +35,15 @@
     <div class="preparingOrders overflow-auto h-screen basis-3/4 px-5 py-3">
       <h3 class="text-xl mb-4">今日準備中訂單</h3>
       <ul class="order flex flex-wrap gap-5" v-if="preparingOrders.length != 0">
-        <li class="bg-white p-4 rounded border-t-8 border-primary-orange shadow-lg xl:w-64 lg:w-56"
-          v-for="(order, order_id) in preparingOrders" :key="order_id" @click="preparingOrderDetail(order)">
-          <div class="table text-3xl mb-2">No.{{ order.table }}</div>
-          <div class="clientNum text-xl">用餐人數：{{ order.people }}人</div>
-          <div class="orderTime text-xl">點餐時間：{{ order.order_time.split(/[T,.]/)[1] }}</div>
+        <li
+          class="bg-white p-4 pt-2 rounded border-t-8 border-primary-orange shadow-lg xl:w-64 lg:w-56"
+          v-for="(order, order_id) in preparingOrders"
+          :key="order_id"
+          @click="preparingOrderDetail(order)"
+        >
+          <div class="table text-2.5xl mb-2 font-semibold">No.{{ order.table }}</div>
+          <div class="clientNum text-base">用餐人數：{{ order.people }} 人</div>
+          <div class="orderTime text-base">點餐時間：{{ order.order_time.split(/[T,.]/)[1] }}</div>
         </li>
       </ul>
       <h4 v-else>尚未有準備中訂單</h4>
@@ -39,20 +51,29 @@
 
     <!-- servedOrders 今日已出餐訂單 -->
     <div class="overflow-auto h-screen basis-1/4 text-xl px-5 py-3">
-      <h3 class="text-xl mb-6">今日已出餐訂單</h3>
+      <h3 class="text-xl">今日已出餐訂單</h3>
       <div class="search mb-3">
         <label for="small-input" class="block mb-2"></label>
-        <i class="material-icons-outlined">
-          search
-        </i>
-        <input type="text" id="small-input"
-          class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-primary-orange focus:border-primary-orange placeholder:請輸入桌號">
+        <i class="material-icons-outlined text-gray-9f"> search </i>
+        <input
+          type="text"
+          id="small-input"
+          class="block w-full p-2 my-3 text-gray-900 border border-gray-300 rounded-md text-base focus:ring-primary-orange focus:border-primary-orange placeholder-gray-9f"
+          placeholder="請輸入桌號"
+        />
       </div>
       <ul class="order">
-        <li class="mb-3 bg-white p-4 shadow-lg rounded border-t-8 border-gray-400" v-for="servedOrder in servedOrders">
-          <div class="table text-3xl mb-2">No.{{ servedOrder.table }}</div>
-          <div class="clientNum text-xl">人數：{{ servedOrder.people }}人</div>
-          <div class="orderTime text-xl">點餐時間：{{ servedOrder.time.split(/[T,.]/)[1] }}</div>
+        <li
+          class="mb-3 bg-white p-4 pt-2 shadow-lg rounded border-t-8 border-gray-400"
+          v-for="servedOrder in servedOrders"
+        >
+          <div class="table text-2.5xl mb-2 font-semibold leading-tight">
+            No.{{ servedOrder.table }}
+          </div>
+          <div class="clientNum text-base">人數：{{ servedOrder.people }} 人</div>
+          <div class="orderTime text-base">
+            點餐時間：{{ servedOrder.order_time.split(/[T,.]/)[1] }}
+          </div>
         </li>
       </ul>
     </div>
@@ -61,7 +82,7 @@
 
 <style>
 .preparingOrders {
-  background: #FAF7F5;
+  background: #faf7f5;
   cursor: default;
 }
 
@@ -84,7 +105,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import axios from 'axios';
+import axios from 'axios'
 
 const apiUrl = 'https://dinetech-host2.onrender.com'
 
@@ -108,47 +129,46 @@ export default defineComponent({
           id: '',
           table: '',
           people: '',
-          time: ''
+          time: '',
+          order_time: ''
         }
       ],
-      searchData: '',
+      searchData: ''
     }
   },
   methods: {
-    checkLogin() {
-
-    },
+    checkLogin() {},
     logout() {
-      alert("登出成功");
-      this.$router.push({ path: './Login' });
+      alert('登出成功')
+      this.$router.push({ path: './Login' })
     },
     getPreparingOrders() {
-      const getPreparingOrdersApi = `${apiUrl}/emp/order`;
+      const getPreparingOrdersApi = `${apiUrl}/emp/order`
       axios
         .get(getPreparingOrdersApi)
         .then((response) => {
-          this.preparingOrders = response.data.data;
+          this.preparingOrders = response.data.data
         })
         .catch((error) => {
-          console.log(error.response.data.message);
+          console.log(error.response.data.message)
         })
     },
     preparingOrderDetail(order) {
-      this.tempOrder = Object.assign({}, order);
-      const id = this.tempOrder.order_id;
+      this.tempOrder = Object.assign({}, order)
+      const id = this.tempOrder.order_id
       this.$router.push({ path: `./Orders/Preparing/${id}` })
     },
     getServedOrders() {
-      const getServedOrdersApi = `${apiUrl}/emp/order/done`;
+      const getServedOrdersApi = `${apiUrl}/emp/order/done`
       axios
         .get(getServedOrdersApi)
         .then((response) => {
-          this.servedOrders = response.data.data;
+          this.servedOrders = response.data.data
         })
         .catch((error) => {
-          console.log(error.response.data.message);
+          console.log(error.response.data.message)
         })
-    },
+    }
     // ws() {
     //   const ws = new WebSocket('wss://dinetech-host2.onrender.com');
     //   console.log(ws);
@@ -162,13 +182,13 @@ export default defineComponent({
     //     console.log(event);
     //     const receivedData = event.data;
     //     console.log('Received message:', receivedData);
-    //     console.log(receivedData.text());      
+    //     console.log(receivedData.text());
     //   };
     // }
   },
   mounted() {
-    this.getPreparingOrders();
-    this.getServedOrders();
-  },
+    this.getPreparingOrders()
+    this.getServedOrders()
+  }
 })
 </script>
